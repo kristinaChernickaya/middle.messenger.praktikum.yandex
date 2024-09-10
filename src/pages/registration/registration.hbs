@@ -1,0 +1,22 @@
+
+<div class="contrainer">
+  <div class="block-center block-login">
+    <div class="block-center_header">
+      <h2>Регистрация</h2>
+    </div>
+    <div class="block-center_middle">
+      {{> Input label="Почта" type="text" name="email" }}
+      {{> Input label="Логин" type="text" name="login" }}
+      {{> Input label="Имя" type="text" name="first_name" }}
+      {{> Input label="Фамилия" type="text" name="second_name" }}
+      {{> Input label="Телефон" type="text" name="phone" }}
+      {{> Input label="Пароль" type="password" name="password" }}
+      {{> Input label="Пароль (ещё раз)" type="password" name="password" }}
+    </div>
+    <div class="block-center_footer">
+      {{> Button text="Зарегистрироваться" }}
+      {{> Link text="Войти" href="/" }}
+    </div>
+  </div>
+</div>
+{{> BlockLinks }}
