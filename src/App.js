@@ -16,8 +16,7 @@ Handlebars.registerPartial('ChartBlock', Components.ChartBlock);
 export default class App {
   constructor() {
     this.state = {
-      currentPage: 'authorization',
-      chats: []
+      currentPage: 'authorization'
     }
     this.appElement = document.getElementById('app');
   };

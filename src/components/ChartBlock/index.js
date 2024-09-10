@@ -1,1 +1,1 @@
-export { default as ChartBlock } from './ChartBlock.hbs?raw';
+export { default as ChartBlock } from './chartBlock.hbs?raw';

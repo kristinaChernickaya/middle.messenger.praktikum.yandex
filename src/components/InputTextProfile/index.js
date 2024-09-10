@@ -1,1 +1,1 @@
-export { default as InputTextProfile } from './InputTextProfile.hbs?raw';
+export { default as InputTextProfile } from './inputTextProfile.hbs?raw';
