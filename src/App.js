@@ -95,4 +95,6 @@ export default class App {
     this.state.currentPage = page;
     this.render();
   }
-} 
+}
+
+

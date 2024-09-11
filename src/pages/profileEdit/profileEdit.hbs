@@ -1,20 +1,22 @@
 {{> LinkArrow href="#" }}
-<div class="contrainer">
+<main class="contrainer">
   <div class="block-center block-profile">
     <div class="block-center_header">
       <a class="logo-block" alt="Поменять аватар" name="avatar"></a>
     </div>
     <div class="block-center_middle ">
       {{> InputTextProfile label="Почта" name="email" text="pochta@yandex.ru" }}
-      {{> InputTextProfile label="Логин" name="display_name" text="ivanivanov" }}
+      {{> InputTextProfile label="Логин" name="login" text="ivanivanov" }}
       {{> InputTextProfile label="Имя" name="first_name" text="John" }}
-      {{> InputTextProfile label="Фамилия" name="first_name" text="Doe" }}
-      {{> InputTextProfile label="Имя в чате" name="login" text="John" }}
+      {{> InputTextProfile label="Фамилия" name="second_name" text="Doe" }}
+      {{> InputTextProfile label="Имя в чате" name="display_name" text="John" }}
       {{> InputTextProfile label="Телефон" name="phone" text="+7 (909) 967 30 30" }}
     </div>
     <div class="block-center_footer">
       {{> Button text="Сохранить" }}
     </div>
   </div>
-</div>
+</main>
 {{> BlockLinks }}
+
+
