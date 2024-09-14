@@ -7,4 +7,3 @@ export { LinkArrow } from './LinkArrow';
 export { InputTextProfile } from './InputTextProfile';
 export { LeftBar } from './LeftBar';
 export { ChartBlock } from './ChartBlock';
-

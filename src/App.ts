@@ -12,20 +12,23 @@ Handlebars.registerPartial('LinkArrow', Components.LinkArrow);
 Handlebars.registerPartial('LeftBar', Components.LeftBar);
 Handlebars.registerPartial('ChartBlock', Components.ChartBlock);
 
-
 export default class App {
+  state: { currentPage: string; };
+  appElement: HTMLElement = document.getElementById("app")!;
+
   constructor() {
-    this.state = {
+    this.state  = {
       currentPage: 'authorization'
     }
-    this.appElement = document.getElementById('app');
+    this.appElement = document.getElementById('app') as HTMLElement;
   };
 
   render() {
+    console.log(document.getElementById('app'));
     let template;
 
     if(this.state.currentPage === 'authorization') {
-      template = Handlebars.compile(Pages.Authorization);
+      template = Handlebars.compile(Pages.Authorization);   
       this.appElement.innerHTML = template({
         currentPage: this.state.currentPage
       })
@@ -82,16 +85,16 @@ export default class App {
   }
  
   attachEventListeners() {
-    const linkNavigation = document.querySelectorAll('.block-links_navigation');
+    const linkNavigation = document.querySelectorAll('.block-links_navigation')!;
     linkNavigation.forEach(link => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
-        this.changePage(e.target.dataset.page);
+        this.changePage((e.target as HTMLLinkElement).dataset.page!);
       })
     })
   }
 
-  changePage(page) {
+  changePage(page: string) {
     this.state.currentPage = page;
     this.render();
   }
