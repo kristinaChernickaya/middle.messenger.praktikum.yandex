@@ -1,14 +1,14 @@
 @import url(reset.pcss);
 @import url(root.pcss);
 
-.contrainer {
+.container {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100vh;
 }
 
-.contrainer-chart {
+.container-chart {
   height: 100%;
   display: flex;
   flex-flow: column wrap;
@@ -60,14 +60,16 @@
     margin-bottom: 5px;
     padding: 0px;
 
-    &:focus, &:active, &:focus-visible {
+    &:focus,
+    &:active,
+    &:focus-visible {
       outline: 0px;
     }
-    
+
     &:focus + label,
     &:not(:placeholder-shown) + label {
       top: -12px;
-      font-size: 11px; 
+      font-size: 11px;
     }
   }
 
@@ -97,27 +99,27 @@
   max-width: 280px;
   transition: 0.5s;
 
-	&:hover {
+  &:hover {
     cursor: pointer;
     opacity: 0.9;
-	}
+  }
 }
 
 /* ссылки навигации */
 .block-links {
   position: absolute;
-  top:  10px;
+  top: 10px;
   left: 33%;
   & > ul {
     display: flex;
-      & > li {
-        margin-right: 20px
-      }
+    & > li {
+      margin-right: 20px;
+    }
   }
-} 
+}
 
 /* profiele */
-.logo-block  {
+.logo-block {
   width: 130px;
   height: 130px;
   border-radius: 100px;
@@ -151,26 +153,26 @@
     -webkit-transform: scale(0) translateY(-50%);
     transform: scale(0) translateY(-50%);
     z-index: 3;
-    }
+  }
 
-    &:after {
-      -webkit-transition: all 350ms ease-in-out;
-      transition: all 350ms ease-in-out;
-    }
-    
-    &:hover:before {
-      opacity: 0.6;
-    }
-    
-    &:hover:after {
-      opacity: 1;
-      -webkit-transform: scale(1) translateY(-50%);
-      transform: scale(1) translateY(-50%);
-    }
+  &:after {
+    -webkit-transition: all 350ms ease-in-out;
+    transition: all 350ms ease-in-out;
+  }
+
+  &:hover:before {
+    opacity: 0.6;
+  }
+
+  &:hover:after {
+    opacity: 1;
+    -webkit-transform: scale(1) translateY(-50%);
+    transform: scale(1) translateY(-50%);
+  }
 }
 
 /* модификаторы */
-.block-center  {
+.block-center {
   padding: 45px 30px 25px;
   text-align: center;
   display: flex;
@@ -192,7 +194,7 @@
 
 .block-profile {
   min-width: 480px;
-  
+
   & .border-bottom-block:last-child {
     border: 0;
   }
@@ -401,4 +403,3 @@
   display: flex;
   align-items: center;
 }
-

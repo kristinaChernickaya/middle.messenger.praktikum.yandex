@@ -1,1 +1,1 @@
-export { default as Authorization } from './authorization.hbs?raw';
+export { default as Authorization } from "./authorization.hbs?raw";

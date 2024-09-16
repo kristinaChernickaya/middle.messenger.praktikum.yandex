@@ -8,13 +8,19 @@
     "build": "npm run prebuild && vite build",
     "prebuild": "tsc --noEmit",
     "start": "vite build && node server.cjs",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prettier": "prettier --write src/**/*.{js,ts}"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.20",
+    "eslint": "^9.10.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
     "postcss": "^8.4.45",
     "postcss-nesting": "^13.0.0",
+    "prettier": "3.3.3",
     "typescript": "^5.6.2",
+    "typescript-eslint": "^8.5.0",
     "vite": "^5.4.1"
   },
   "dependencies": {

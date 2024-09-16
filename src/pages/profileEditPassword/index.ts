@@ -1,2 +1,1 @@
-export { default as ProfileEditPassword } from './profileEditPassword.hbs?raw';
-
+export { default as ProfileEditPassword } from "./profileEditPassword.hbs?raw";

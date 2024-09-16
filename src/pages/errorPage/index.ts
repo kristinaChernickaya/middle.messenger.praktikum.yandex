@@ -1,1 +1,1 @@
-export { default as ErrorPage } from './errorPage.hbs?raw';
+export { default as ErrorPage } from "./errorPage.hbs?raw";

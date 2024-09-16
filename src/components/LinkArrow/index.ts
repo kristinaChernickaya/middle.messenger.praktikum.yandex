@@ -1,1 +1,1 @@
-export { default as LinkArrow } from './LinkArrow.hbs?raw';
+export { default as LinkArrow } from "./LinkArrow.hbs?raw";

@@ -1,1 +1,1 @@
-export { default as ProfileEdit } from './profileEdit.hbs?raw';
+export { default as ProfileEdit } from "./profileEdit.hbs?raw";

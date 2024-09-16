@@ -1,1 +1,1 @@
-export { default as LeftBar } from './LeftBar.hbs?raw';
+export { default as LeftBar } from "./LeftBar.hbs?raw";
