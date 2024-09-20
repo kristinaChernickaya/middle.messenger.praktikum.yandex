@@ -3,7 +3,7 @@ import * as Pages from './pages';
 import * as Components from './components';
 
 Handlebars.registerPartial('BlockLinks', Components.BlockLinks);
-Handlebars.registerPartial('Button', Components.Button);
+//Handlebars.registerPartial('Button', Components.Button);
 Handlebars.registerPartial('Link', Components.Link);
 Handlebars.registerPartial('Input', Components.Input);
 Handlebars.registerPartial('TextProfile', Components.TextProfile);
