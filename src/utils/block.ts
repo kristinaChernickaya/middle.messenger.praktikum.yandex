@@ -1,5 +1,6 @@
 import EventBus from './event-bus';
 import Handlebars from 'handlebars';
+import { v4 as makeUUID } from 'uuid';
 export default class Block {
   props(props: any, nextProps: any) {
     throw new Error('Method not implemented.');
@@ -12,6 +13,7 @@ export default class Block {
   };
   _element: any = null;
   //_meta = null;
+  id = null;
 
   _meta: { tagName: string; props: {} };
   eventBus: any;
@@ -23,12 +25,10 @@ export default class Block {
       tagName,
       props,
     };
-    this.props = this._makePropsProxy(props);
-
+    this.id = makeUUID();
+    this.props = this._makePropsProxy({ ...props, id: this.id });
     this.eventBus = () => eventBus;
-
     this._registerEvents(eventBus);
-
     eventBus.emit(Block.EVENTS.INIT);
   }
   _registerEvents(eventBus: EventBus<unknown>) {
@@ -53,7 +53,13 @@ export default class Block {
   }
 
   _createDocumentElement(tagName: string) {
-    return document.createElement(tagName);
+    const { settings } = this.props;
+    const element = document.createElement(tagName);
+    if (settings?.withInternalID) {
+      element.setAttribute('data-id', this.id);
+    }
+
+    return element;
   }
 
   _render() {
@@ -63,6 +69,7 @@ export default class Block {
     }
     this._element.innerHTML = block;
     this._addEvents();
+    console.log(this.props);
   }
   render() {}
 
