@@ -1,5 +1,5 @@
 import EventBus from './event-bus';
-
+import Handlebars from 'handlebars';
 export default class Block {
   props(props: any, nextProps: any) {
     throw new Error('Method not implemented.');
@@ -58,7 +58,11 @@ export default class Block {
 
   _render() {
     const block = this.render();
+    if (Object.keys(this.props.events).length !== 0) {
+      this._removeEvents();
+    }
     this._element.innerHTML = block;
+    this._addEvents();
   }
   render() {}
 
@@ -100,11 +104,29 @@ export default class Block {
     this.eventBus().emit(Block.EVENTS.FLOW_CDU);
   };
 
+  compile(templ: string, props: any) {
+    const compiledTemplate = Handlebars.compile(templ);
+    const fragment = document.createElement('template');
+    fragment.innerHTML = compiledTemplate({ ...props });
+
+    return fragment.innerHTML;
+  }
+
+  _addEvents() {
+    const { events = {} } = this.props;
+    Object.keys(events).forEach((eventName) => {
+      this._element.addEventListener(eventName, events[eventName]);
+    });
+  }
+
+  _removeEvents() {
+    const { events = {} } = this.props;
+    Object.keys(events).forEach((eventName) => {
+      this._element.removeEventListener(eventName, events[eventName]);
+    });
+  }
+
   _makePropsProxy(props: any) {
-    // const updateValue = (oldValue, newValue) => {
-    //   this._eventBus.emit(Block.EVENTS.FLOW_CDU, [oldValue, newValue]);
-    // };
-    console.log(props);
     const proxyProps = new Proxy(props, {
       get(target, prop) {
         if (prop.indexOf('_') === 0) {

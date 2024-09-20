@@ -7,10 +7,13 @@ document.addEventListener('DOMContentLoaded', () => {
   // const app = new App();
   // app.render();
 
-  //Я пока убрала все страницы, и хочу просто выводить кнопку (.hbs шаблон) в класс app
-
   let button = new Button({
     text: 'button text',
+    events: {
+      click: (event) => {
+        console.log(event);
+      },
+    },
   });
 
   render('.app', button);

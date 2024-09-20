@@ -7,8 +7,6 @@ export default class Button extends Block {
   }
 
   render() {
-    // return compile(template, this.props);
-    //return template;
-    return `<button>${this.props.text}</button>`;
+    return this.compile(template, this.props);
   }
 }
