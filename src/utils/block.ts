@@ -1,10 +1,8 @@
 import EventBus from './event-bus';
 import Handlebars from 'handlebars';
 import { v4 as makeUUID } from 'uuid';
+import { TBlockProps, TProps } from '../types';
 export default class Block {
-  props(props: any, nextProps: any) {
-    throw new Error('Method not implemented.');
-  }
   static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
@@ -12,12 +10,11 @@ export default class Block {
     FLOW_CDU: 'flow:component-did-update',
   };
   _element: any = null;
-  //_meta = null;
-  id = null;
-
   _meta: { tagName: string; props: {} };
-  eventBus: any;
+  eventBus;
   _eventBus: any;
+  id: string;
+  props: TBlockProps;
 
   constructor(tagName = 'div', props = {}) {
     const eventBus = new EventBus();
@@ -26,6 +23,7 @@ export default class Block {
       props,
     };
     this.id = makeUUID();
+
     this.props = this._makePropsProxy({ ...props, id: this.id });
     this.eventBus = () => eventBus;
     this._registerEvents(eventBus);
@@ -53,9 +51,9 @@ export default class Block {
   }
 
   _createDocumentElement(tagName: string) {
-    const { settings } = this.props;
     const element = document.createElement(tagName);
-    if (settings?.withInternalID) {
+    const { attr } = this.props;
+    if (attr?.withInternalID) {
       element.setAttribute('data-id', this.id);
     }
 
@@ -64,12 +62,14 @@ export default class Block {
 
   _render() {
     const block = this.render();
-    if (Object.keys(this.props.events).length !== 0) {
+    if (this.props.events && Object.keys(this.props.events).length !== 0) {
       this._removeEvents();
     }
+    console.log(this._element);
+
     this._element.innerHTML = block;
+
     this._addEvents();
-    console.log(this.props);
   }
   render() {}
 
@@ -88,19 +88,16 @@ export default class Block {
     this._eventBus().emit(Block.EVENTS.FLOW_CDM);
   }
 
-  _componentDidUpdate(oldProps: any, newProps: any) {
-    const response = this.componentDidUpdate(oldProps, newProps);
-    if (response) {
-      this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
-      return true;
-    }
+  _componentDidUpdate() {
+    //const response = this.componentDidUpdate(oldProps, newProps);
 
-    return false;
-  }
-
-  componentDidUpdate(oldProps: any, newProps: any) {
+    this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
     return true;
   }
+
+  // componentDidUpdate(oldProps: any, newProps: any) {
+  //   return true;
+  // }
 
   setProps = (nextProps: any) => {
     if (!nextProps) {
@@ -111,7 +108,7 @@ export default class Block {
     this.eventBus().emit(Block.EVENTS.FLOW_CDU);
   };
 
-  compile(templ: string, props: any) {
+  compile(templ: string, props: TProps) {
     const compiledTemplate = Handlebars.compile(templ);
     const fragment = document.createElement('template');
     fragment.innerHTML = compiledTemplate({ ...props });
@@ -133,9 +130,9 @@ export default class Block {
     });
   }
 
-  _makePropsProxy(props: any) {
+  _makePropsProxy(props: TProps) {
     const proxyProps = new Proxy(props, {
-      get(target, prop) {
+      get(target, prop: string) {
         if (prop.indexOf('_') === 0) {
           throw Error('Нет прав');
         }
@@ -144,11 +141,10 @@ export default class Block {
         return typeof value === 'function' ? value.bind(target) : value;
       },
 
-      set(target, prop, value) {
+      set(target, prop: string, value) {
         if (prop.indexOf('_') === 0 || !value) {
           throw Error('Нет прав');
         }
-
         target[prop] = value;
         return true;
       },

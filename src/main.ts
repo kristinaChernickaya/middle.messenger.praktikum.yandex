@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let button = new Button({
     text: 'button text',
-    settings: { withInternalID: true },
+    attr: { withInternalID: true },
     events: {
       click: (event) => {
         console.log(event);

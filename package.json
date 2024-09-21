@@ -12,6 +12,7 @@
     "prettier": "prettier --write src/**/*.{js,ts}"
   },
   "devDependencies": {
+    "@types/uuid": "^10.0.0",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.10.0",
     "eslint-config-prettier": "^9.1.0",
