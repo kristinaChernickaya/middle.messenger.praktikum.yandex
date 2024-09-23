@@ -10,23 +10,28 @@ export default class Block {
     FLOW_CDU: 'flow:component-did-update',
   };
   _element: any = null;
-  _meta: { tagName: string; props: {} };
+  _meta: { tagName: string; ownProps: {} };
   eventBus;
   _eventBus: any;
   id: string;
-  props: TBlockProps;
+  //ownProps: TBlockProps;
 
-  constructor(tagName = 'div', props = {}) {
+  constructor(tagName = 'div', propsAndChildren = {}) {
+    const { children, ownProps } = this._getChildren(propsAndChildren);
+
+    this.children = children;
+
     const eventBus = new EventBus();
     this._meta = {
       tagName,
-      props,
+      ownProps,
     };
-    this.id = makeUUID();
 
-    this.props = this._makePropsProxy({ ...props, id: this.id });
+    this.id = makeUUID();
+    this.props = this._makePropsProxy({ ...ownProps, id: this.id });
     this.eventBus = () => eventBus;
     this._registerEvents(eventBus);
+
     eventBus.emit(Block.EVENTS.INIT);
   }
   _registerEvents(eventBus: EventBus<unknown>) {
@@ -36,12 +41,27 @@ export default class Block {
     eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
   }
 
+  _getChildren(propsAndChildren) {
+    const children = {};
+    const ownProps = {};
+    Object.entries(propsAndChildren).forEach(([key, value]) => {
+      if (value instanceof Block) {
+        children[key] = value;
+      } else {
+        ownProps[key] = value;
+      }
+    });
+
+    return { children, ownProps };
+  }
+
   get element() {
     return this._element;
   }
 
   init() {
     this._createResources();
+    console.log('init', this._element);
     this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
   }
 
@@ -62,15 +82,17 @@ export default class Block {
 
   _render() {
     const block = this.render();
+    this._events = this.props.events;
+
     if (this.props.events && Object.keys(this.props.events).length !== 0) {
       this._removeEvents();
     }
-    console.log(this._element);
-
+    this._element.innerHTML = '';
     this._element.innerHTML = block;
 
     this._addEvents();
   }
+
   render() {}
 
   getContent() {
@@ -79,6 +101,9 @@ export default class Block {
 
   _componentDidMount() {
     this.componentDidMount();
+    Object.values(this.children).forEach((child) => {
+      child.dispatchComponentDidMount();
+    });
   }
   componentDidMount() {
     this._eventBus().emit(Block.EVENTS.FLOW_CDM);
@@ -89,15 +114,18 @@ export default class Block {
   }
 
   _componentDidUpdate() {
-    //const response = this.componentDidUpdate(oldProps, newProps);
+    const response = this.componentDidUpdate(oldProps, newProps);
 
-    this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
+    if (response) {
+      this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
+    }
+
     return true;
   }
 
-  // componentDidUpdate(oldProps: any, newProps: any) {
-  //   return true;
-  // }
+  componentDidUpdate(oldProps: any, newProps: any) {
+    return true;
+  }
 
   setProps = (nextProps: any) => {
     if (!nextProps) {
@@ -105,21 +133,36 @@ export default class Block {
     }
 
     Object.assign(this.props, nextProps);
-    this.eventBus().emit(Block.EVENTS.FLOW_CDU);
+    this.eventBus().emit(Block.EVENTS.FLOW_CDU, [this.props, nextProps]);
   };
 
-  compile(templ: string, props: TProps) {
-    const compiledTemplate = Handlebars.compile(templ);
+  compile(template: string, props: TProps) {
+    const propsAndStubs = { ...props };
+
+    Object.entries(this.children).forEach(([key, child]) => {
+      propsAndStubs[key] = `<div data-id="${child.id}"></div>`;
+    });
+
+    const compiledTemplate = Handlebars.compile(template);
     const fragment = document.createElement('template');
-    fragment.innerHTML = compiledTemplate({ ...props });
+
+    fragment.innerHTML = compiledTemplate({ ...propsAndStubs });
+    Object.values(this.children).forEach((child) => {
+      const stub = fragment.content.querySelector(`[data-id="${child.id}"]`);
+
+      if (stub) {
+        stub.replaceWith(child.getContent());
+      }
+    });
 
     return fragment.innerHTML;
   }
 
   _addEvents() {
     const { events = {} } = this.props;
+
     Object.keys(events).forEach((eventName) => {
-      this._element.addEventListener(eventName, events[eventName]);
+      this._element.addEventListener(eventName, events[eventName], true);
     });
   }
 
