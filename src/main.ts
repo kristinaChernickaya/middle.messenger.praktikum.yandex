@@ -10,22 +10,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const profileTemplate = `
   <div>
-    {{title}}
+   <h2>{{title}}</h2>
     {{{button}}}
   </div>
 `;
-  class UserProfile extends Block {
-    constructor(props) {
-      super('div', props);
-    }
 
-    render() {
-      return this.compile(profileTemplate, {
-        title: this.props.title,
-        button,
-      });
-    }
-  }
   const button = new Button({
     text: 'button text',
     attr: { withInternalID: true },
@@ -35,6 +24,19 @@ document.addEventListener('DOMContentLoaded', () => {
       },
     },
   });
+  class UserProfile extends Block {
+    constructor(props) {
+      super(props);
+    }
+
+    render() {
+      return this.compile(profileTemplate, {
+        title: this.props.title,
+        button,
+      });
+    }
+  }
+
   const profile = new UserProfile({
     title: 'Авторизация',
     button,

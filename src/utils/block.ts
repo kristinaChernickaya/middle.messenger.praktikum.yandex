@@ -10,12 +10,12 @@ export default class Block {
     FLOW_CDU: 'flow:component-did-update',
   };
   _element: any = null;
-  _meta: { tagName: string; ownProps: {} };
+  _meta: { ownProps: {} };
   _eventBus: any;
   id: string;
   //ownProps: TBlockProps;
 
-  constructor(tagName = 'div', propsAndChildren = {}) {
+  constructor(propsAndChildren = {}) {
     const { children, ownProps } = this._getChildren(propsAndChildren);
 
     this.children = children;
@@ -23,7 +23,6 @@ export default class Block {
     const eventBus = new EventBus();
 
     this._meta = {
-      tagName,
       ownProps,
     };
 
@@ -66,11 +65,10 @@ export default class Block {
   }
 
   _createResources() {
-    const { tagName } = this._meta;
-    this._element = this._createDocumentElement(tagName);
+    this._element = this._createDocumentElement('div');
   }
 
-  _createDocumentElement(tagName: string) {
+  _createDocumentElement(tagName) {
     const element = document.createElement(tagName);
     const { attr } = this.props;
     if (attr?.withInternalID) {
@@ -87,11 +85,16 @@ export default class Block {
       this._removeEvents();
     }
     this._element.innerHTML = '';
-    this._element.appendChild(block);
+
+    const firstElement = this.render().firstElementChild;
+    if (this._element !== null) {
+      this._element.replaceWith(firstElement);
+    }
+    this._element = firstElement;
+
     this._addEvents();
   }
 
-  // Может переопределять пользователь, необязательно трогать
   render() {}
   componentDidMount() {}
 
@@ -128,7 +131,6 @@ export default class Block {
     }
 
     Object.assign(this.props, nextProps);
-
     this.eventBus().emit(Block.EVENTS.FLOW_CDU);
   };
 
