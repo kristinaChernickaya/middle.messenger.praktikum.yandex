@@ -11,7 +11,6 @@ export default class Block {
   };
   _element: any = null;
   _meta: { tagName: string; ownProps: {} };
-  eventBus;
   _eventBus: any;
   id: string;
   //ownProps: TBlockProps;
@@ -22,6 +21,7 @@ export default class Block {
     this.children = children;
 
     const eventBus = new EventBus();
+
     this._meta = {
       tagName,
       ownProps,
@@ -30,6 +30,7 @@ export default class Block {
     this.id = makeUUID();
     this.props = this._makePropsProxy({ ...ownProps, id: this.id });
     this.eventBus = () => eventBus;
+
     this._registerEvents(eventBus);
 
     eventBus.emit(Block.EVENTS.INIT);
@@ -61,7 +62,6 @@ export default class Block {
 
   init() {
     this._createResources();
-    console.log('init', this._element);
     this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
   }
 
@@ -82,18 +82,18 @@ export default class Block {
 
   _render() {
     const block = this.render();
-    this._events = this.props.events;
 
     if (this.props.events && Object.keys(this.props.events).length !== 0) {
       this._removeEvents();
     }
     this._element.innerHTML = '';
-    this._element.innerHTML = block;
-
+    this._element.appendChild(block);
     this._addEvents();
   }
 
+  // Может переопределять пользователь, необязательно трогать
   render() {}
+  componentDidMount() {}
 
   getContent() {
     return this.element;
@@ -101,30 +101,25 @@ export default class Block {
 
   _componentDidMount() {
     this.componentDidMount();
+
     Object.values(this.children).forEach((child) => {
       child.dispatchComponentDidMount();
     });
   }
-  componentDidMount() {
-    this._eventBus().emit(Block.EVENTS.FLOW_CDM);
-  }
 
   dispatchComponentDidMount() {
-    this._eventBus().emit(Block.EVENTS.FLOW_CDM);
+    this.eventBus().emit(Block.EVENTS.FLOW_CDM);
   }
 
-  _componentDidUpdate() {
-    const response = this.componentDidUpdate(oldProps, newProps);
-
-    if (response) {
-      this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
-    }
-
-    return true;
+  _componentDidUpdate(args) {
+    let { oldProps, newProps } = { ...args };
+    this.componentDidUpdate(oldProps, newProps);
   }
 
   componentDidUpdate(oldProps: any, newProps: any) {
-    return true;
+    if (oldProps !== newProps) {
+      this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
+    }
   }
 
   setProps = (nextProps: any) => {
@@ -133,7 +128,8 @@ export default class Block {
     }
 
     Object.assign(this.props, nextProps);
-    this.eventBus().emit(Block.EVENTS.FLOW_CDU, [this.props, nextProps]);
+
+    this.eventBus().emit(Block.EVENTS.FLOW_CDU);
   };
 
   compile(template: string, props: TProps) {
@@ -155,7 +151,7 @@ export default class Block {
       }
     });
 
-    return fragment.innerHTML;
+    return fragment.content;
   }
 
   _addEvents() {
@@ -173,7 +169,11 @@ export default class Block {
     });
   }
 
-  _makePropsProxy(props: TProps) {
+  _makePropsProxy(props = {}) {
+    const updateProps = (oldProps, newProps) => {
+      this.eventBus().emit(Block.EVENTS.FLOW_CDU, { oldProps, newProps });
+    };
+
     const proxyProps = new Proxy(props, {
       get(target, prop: string) {
         if (prop.indexOf('_') === 0) {
@@ -188,7 +188,10 @@ export default class Block {
         if (prop.indexOf('_') === 0 || !value) {
           throw Error('Нет прав');
         }
+        const oldProps = { ...target };
         target[prop] = value;
+        updateProps(oldProps, target);
+
         return true;
       },
 

@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   const button = new Button({
     text: 'button text',
-    attr: { withInternalID: false },
+    attr: { withInternalID: true },
     events: {
       click: (event) => {
         console.log('button event !!!!!!!!');
@@ -38,17 +38,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const profile = new UserProfile({
     title: 'Авторизация',
     button,
-    // events: {
-    //   click: (event) => {
-    //     console.log('UserProfile event !!!!!!!!');
-    //   },
-    // },
   });
 
   renderDOM('.app', profile);
-  //console.log(profile);
-
-  // setTimeout(() => {
-  //   button.setProps({ text: 'Updated text on button' });
-  // }, 2000);
+  setTimeout(() => {
+    button.setProps({ text: 'Updated text on button' });
+  }, 2000);
 });
