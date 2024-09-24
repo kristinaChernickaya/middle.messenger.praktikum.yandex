@@ -1,7 +1,8 @@
-export { BlockLinks } from './BlockLinks';
-//export { TemplateButton } from './Button';
-export { Link } from './Link';
+export { Button } from './Button';
 export { Input } from './Input';
+export { InputBlock } from './InputBlock';
+export { Link } from './Link';
+export { BlockLinks } from './BlockLinks';
 export { TextProfile } from './TextProfile';
 export { LinkArrow } from './LinkArrow';
 export { InputTextProfile } from './InputTextProfile';

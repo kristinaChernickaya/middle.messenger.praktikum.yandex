@@ -1,16 +1,18 @@
 import Handlebars from 'handlebars';
-import * as Pages from './pages';
-import * as Components from './components';
+import * as Page from './pages';
+import * as Component from './components';
 
-Handlebars.registerPartial('BlockLinks', Components.BlockLinks);
+import { renderDOM } from './utils/renderDOM';
+
+Handlebars.registerPartial('BlockLinks', Component.BlockLinks);
 //Handlebars.registerPartial('Button', Components.Button);
-Handlebars.registerPartial('Link', Components.Link);
-Handlebars.registerPartial('Input', Components.Input);
-Handlebars.registerPartial('TextProfile', Components.TextProfile);
-Handlebars.registerPartial('InputTextProfile', Components.InputTextProfile);
-Handlebars.registerPartial('LinkArrow', Components.LinkArrow);
-Handlebars.registerPartial('LeftBar', Components.LeftBar);
-Handlebars.registerPartial('ChartBlock', Components.ChartBlock);
+Handlebars.registerPartial('Link', Component.Link);
+// Handlebars.registerPartial('Input', Components.Input);
+Handlebars.registerPartial('TextProfile', Component.TextProfile);
+Handlebars.registerPartial('InputTextProfile', Component.InputTextProfile);
+Handlebars.registerPartial('LinkArrow', Component.LinkArrow);
+Handlebars.registerPartial('LeftBar', Component.LeftBar);
+Handlebars.registerPartial('ChartBlock', Component.ChartBlock);
 
 export default class App {
   state: { currentPage: string };
@@ -25,60 +27,62 @@ export default class App {
 
   render() {
     let template;
+    this.appElement.innerHTML = '';
+
     if (this.state.currentPage === 'authorization') {
-      template = Handlebars.compile(Pages.Authorization);
-      this.appElement.innerHTML = template({
+      template = new Page.Authorization({
         currentPage: this.state.currentPage,
       });
     }
     if (this.state.currentPage === 'registration') {
-      template = Handlebars.compile(Pages.Registration);
-      this.appElement.innerHTML = template({
+      template = new Page.Registration({
         currentPage: this.state.currentPage,
       });
     }
-    if (this.state.currentPage === 'profile') {
-      template = Handlebars.compile(Pages.Profile);
-      this.appElement.innerHTML = template({
-        currentPage: this.state.currentPage,
-      });
-    }
-    if (this.state.currentPage === 'profile-edit') {
-      template = Handlebars.compile(Pages.ProfileEdit);
-      this.appElement.innerHTML = template({
-        currentPage: this.state.currentPage,
-      });
-    }
-    if (this.state.currentPage === 'profile-edit-password') {
-      template = Handlebars.compile(Pages.ProfileEditPassword);
-      this.appElement.innerHTML = template({
-        currentPage: this.state.currentPage,
-      });
-    }
-    if (this.state.currentPage === 'charts') {
-      template = Handlebars.compile(Pages.Chats);
-      this.appElement.innerHTML = template({
-        currentPage: this.state.currentPage,
-      });
-    }
-    if (this.state.currentPage === 'chart') {
-      template = Handlebars.compile(Pages.Chat);
-      this.appElement.innerHTML = template({
-        currentPage: this.state.currentPage,
-      });
-    }
-    if (this.state.currentPage === 'server-error') {
-      template = Handlebars.compile(Pages.ServerErrorPage);
-      this.appElement.innerHTML = template({
-        currentPage: this.state.currentPage,
-      });
-    }
-    if (this.state.currentPage === 'error') {
-      template = Handlebars.compile(Pages.ErrorPage);
-      this.appElement.innerHTML = template({
-        currentPage: this.state.currentPage,
-      });
-    }
+    renderDOM('.app', template);
+    //    let template;
+    // if (this.state.currentPage === 'profile') {
+    //   template = Handlebars.compile(Page.Profile);
+    //   this.appElement.innerHTML = template({
+    //     currentPage: this.state.currentPage,
+    //   });
+    // }
+    // if (this.state.currentPage === 'profile-edit') {
+    //   template = Handlebars.compile(Page.ProfileEdit);
+    //   this.appElement.innerHTML = template({
+    //     currentPage: this.state.currentPage,
+    //   });
+    // }
+    // if (this.state.currentPage === 'profile-edit-password') {
+    //   template = Handlebars.compile(Page.ProfileEditPassword);
+    //   this.appElement.innerHTML = template({
+    //     currentPage: this.state.currentPage,
+    //   });
+    // }
+    // if (this.state.currentPage === 'charts') {
+    //   template = Handlebars.compile(Page.Chats);
+    //   this.appElement.innerHTML = template({
+    //     currentPage: this.state.currentPage,
+    //   });
+    // }
+    // if (this.state.currentPage === 'chart') {
+    //   template = Handlebars.compile(Page.Chat);
+    //   this.appElement.innerHTML = template({
+    //     currentPage: this.state.currentPage,
+    //   });
+    // }
+    // if (this.state.currentPage === 'server-error') {
+    //   template = Handlebars.compile(Page.ServerErrorPage);
+    //   this.appElement.innerHTML = template({
+    //     currentPage: this.state.currentPage,
+    //   });
+    // }
+    // if (this.state.currentPage === 'error') {
+    //   template = Handlebars.compile(Page.ErrorPage);
+    //   this.appElement.innerHTML = template({
+    //     currentPage: this.state.currentPage,
+    //   });
+    // }
     this.attachEventListeners();
   }
 

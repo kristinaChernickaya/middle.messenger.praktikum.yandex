@@ -16,9 +16,9 @@ export default class Block {
   //ownProps: TBlockProps;
 
   constructor(propsAndChildren = {}) {
-    const { children, ownProps } = this._getChildren(propsAndChildren);
-
+    const { children, ownProps, lists } = this._getChildrenAndList(propsAndChildren);
     this.children = children;
+    this.lists = lists;
 
     const eventBus = new EventBus();
 
@@ -41,18 +41,22 @@ export default class Block {
     eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
   }
 
-  _getChildren(propsAndChildren) {
+  _getChildrenAndList(propsAndChildren) {
     const children = {};
     const ownProps = {};
+    const lists = {};
+
     Object.entries(propsAndChildren).forEach(([key, value]) => {
       if (value instanceof Block) {
         children[key] = value;
+      } else if (Array.isArray(value)) {
+        lists[key] = value;
       } else {
         ownProps[key] = value;
       }
     });
 
-    return { children, ownProps };
+    return { children, ownProps, lists };
   }
 
   get element() {
@@ -79,7 +83,7 @@ export default class Block {
   }
 
   _render() {
-    const block = this.render();
+    //const block = this.render();
 
     if (this.props.events && Object.keys(this.props.events).length !== 0) {
       this._removeEvents();
@@ -141,15 +145,34 @@ export default class Block {
       propsAndStubs[key] = `<div data-id="${child.id}"></div>`;
     });
 
+    Object.entries(this.lists).forEach(([key, list]) => {
+      propsAndStubs[key] = `<div data-id="${list.id}"></div>`;
+    });
+
     const compiledTemplate = Handlebars.compile(template);
     const fragment = document.createElement('template');
 
     fragment.innerHTML = compiledTemplate({ ...propsAndStubs });
+
     Object.values(this.children).forEach((child) => {
       const stub = fragment.content.querySelector(`[data-id="${child.id}"]`);
-
       if (stub) {
         stub.replaceWith(child.getContent());
+      }
+    });
+
+    Object.entries(this.lists).forEach(([, list]) => {
+      const listContent = this._createDocumentElement('template');
+      list.forEach((item) => {
+        if (item instanceof Block) {
+          listContent.content.append(item.getContent());
+        } else {
+          listContent.content.append(`${item}`);
+        }
+      });
+      const stub = fragment.content.querySelector(`[data-id="${list.id}"]`);
+      if (stub) {
+        stub.replaceWith(listContent.content);
       }
     });
 
