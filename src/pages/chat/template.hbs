@@ -1,14 +1,21 @@
-<div class="block-chats-list">
-  <div class="chart-sidebar">{{> LeftBar }}</div>
-  <div class="block-chat_center">
-    <div class="container-chart">
-      <div class="chat_header border-bottom-block">
-        <div class="chat_header_info">
-          <div class="user-img"></div>
-          <div class="text-bold">Alex</div>
+<div class='block-chats-list'>
+  {{{leftSideBar}}}
+  <div class='block-chat_center'>
+    <div class='container-chart'>
+      {{#if contentCenter}}
+        <div class='center-items block-chats-list_center'>
+          <span class='text-grey-color'>{{contentCenter}}</span>
         </div>
-      </div>
-      <div class="chat_middle">
+      {{/if}}
+
+      {{! <div class='chat_header border-bottom-block'>
+        <div class='chat_header_info'>
+          <div class='user-img'></div>
+          <div class='text-bold'>Alex</div>
+        </div>
+      </div> }}
+
+      {{!-- <div class="chat_middle">
         <div class="date-text-messages text-grey-color">19 июня</div>
         <div class="chart-message-block chart-answer-block">
           Привет! Смотри, тут всплыл интересный кусок лунной космической истории — НАСА в какой-то момент попросила Хассельблад адаптировать модель SWC для полетов на Луну. Сейчас мы все знаем что астронавты летали с моделью 500 EL — и к слову говоря, все тушки этих камер все еще находятся на поверхности Луны, так как астронавты с собой забрали только кассеты с пленкой.
@@ -17,12 +24,14 @@
           Круто
       </div>
       </div>
+
+
       <div class="chat_footer">
         <input class="input-grey input-message" placeholder="Сообщение" name="message" >
         <a class="circle circle-big button-sent-message" href={{ href }}> > </a>
-      </div>
+      </div> --}}
+
     </div>
   </div>
+  {{{blockLinks}}}
 </div>
-{{> BlockLinks }}
-

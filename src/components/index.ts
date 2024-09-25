@@ -8,6 +8,5 @@ export { TextProfile } from './textProfile';
 export { Avatar } from './avatar';
 export { Title } from './title';
 export { InputTextProfile } from './inputTextProfile';
-
-export { LeftBar } from './leftBar';
-export { ChartBlock } from './chartBlock';
+export { chatBlock } from './chatBlock';
+export { ChatLeftSideBar } from './chatLeftSideBar';

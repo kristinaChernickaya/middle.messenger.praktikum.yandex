@@ -1,16 +1,13 @@
 import * as Page from './pages';
 import { renderDOM } from './utils/renderDOM';
 
-// Handlebars.registerPartial('LeftBar', Component.LeftBar);
-// Handlebars.registerPartial('ChartBlock', Component.ChartBlock);
-
 export default class App {
   state: { currentPage: string };
   appElement: HTMLElement = document.getElementById('app')!;
 
   constructor() {
     this.state = {
-      currentPage: 'profile',
+      currentPage: 'chats',
     };
     this.appElement = document.getElementById('app') as HTMLElement;
   }
@@ -54,17 +51,15 @@ export default class App {
         currentPage: this.state.currentPage,
       });
     }
-
+    if (this.state.currentPage === 'chats') {
+      template = new Page.ChatPreview({
+        currentPage: this.state.currentPage,
+      });
+    }
     renderDOM('.app', template);
 
     // if (this.state.currentPage === 'charts') {
     //   template = Handlebars.compile(Page.Chats);
-    //   this.appElement.innerHTML = template({
-    //     currentPage: this.state.currentPage,
-    //   });
-    // }
-    // if (this.state.currentPage === 'chart') {
-    //   template = Handlebars.compile(Page.Chat);
     //   this.appElement.innerHTML = template({
     //     currentPage: this.state.currentPage,
     //   });
