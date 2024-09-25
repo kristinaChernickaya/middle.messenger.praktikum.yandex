@@ -6,8 +6,8 @@ export type TButtonProps = TBlockProps & {
   text: string;
 };
 
-export type TObjectKeys = {
-  <T, K extends keyof T>(obj: T, key: K): T[K];
+export type TAttr = {
+  [key: string]: string;
 };
 
 export type TProps = Record<string, string | Function | unknown>;
@@ -15,5 +15,14 @@ export type TProps = Record<string, string | Function | unknown>;
 export type TBlockProps = TProps & {
   events?: EventType;
   className?: string;
-  attr?: { withInternalID: boolean } & Record<string, string | boolean>;
+  withInternalId?: boolean;
+  attr?: Record<string, string | boolean>;
+};
+
+export type TEvent = {
+  [key: string]: (event: Event) => void;
+};
+
+export type TObjectKeys = {
+  <T, K extends keyof T>(obj: T, key: K): T[K];
 };

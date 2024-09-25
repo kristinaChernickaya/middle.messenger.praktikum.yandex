@@ -4,10 +4,6 @@ import * as Component from './components';
 
 import { renderDOM } from './utils/renderDOM';
 
-Handlebars.registerPartial('BlockLinks', Component.BlockLinks);
-//Handlebars.registerPartial('Button', Components.Button);
-Handlebars.registerPartial('Link', Component.Link);
-// Handlebars.registerPartial('Input', Components.Input);
 Handlebars.registerPartial('TextProfile', Component.TextProfile);
 Handlebars.registerPartial('InputTextProfile', Component.InputTextProfile);
 Handlebars.registerPartial('LinkArrow', Component.LinkArrow);
