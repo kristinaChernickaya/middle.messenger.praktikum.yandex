@@ -1,8 +1,8 @@
 export { Authorization } from './login';
 export { Registration } from './login';
-export { Profile } from './profile';
-export { ProfileEdit } from './profileEdit';
-export { ProfileEditPassword } from './profileEditPassword';
+export { ProfileInfo } from './profile';
+export { ProfileEdit } from './profile';
+export { ProfileEditPassword } from './profile';
 export { ServerErrorPage } from './serverErrorPage';
 export { ErrorPage } from './errorPage';
 export { Chats } from './chats';
