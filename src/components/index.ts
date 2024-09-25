@@ -5,10 +5,9 @@ export { Link } from './link';
 export { BlockLinks } from './blockLinks';
 export { LinkBorderBottom } from './linkBorderBottom';
 export { TextProfile } from './textProfile';
-export { Logo } from './logo';
+export { Avatar } from './avatar';
 export { Title } from './title';
 export { InputTextProfile } from './inputTextProfile';
 
-export { LinkArrow } from './linkArrow';
 export { LeftBar } from './leftBar';
 export { ChartBlock } from './chartBlock';

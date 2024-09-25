@@ -78,14 +78,23 @@ export default class ProfileInfo extends Block {
       return new Component.TextProfile(user);
     });
 
-    let logo = new Component.Logo({});
+    let avatar = new Component.Avatar({});
     let title = new Component.Title({ title: 'John' });
+    const backButton = new Component.Button({
+      className: 'arrowLeft',
+      events: {
+        click: () => {
+          console.log('back event');
+        },
+      },
+    });
 
     super({
       ...props,
-      topContainer: [logo, title],
+      topContainer: [avatar, title],
       middleContainer: userInfo,
       bottomContainer: links,
+      leftSideBar: backButton,
       blockLinks: new Component.BlockLinks({}),
     });
   }

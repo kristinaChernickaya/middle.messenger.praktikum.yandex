@@ -104,6 +104,14 @@
     opacity: 0.9;
   }
 }
+.arrowLeft {
+  max-width: 40px;
+  border-radius: 50px;
+}
+.arrowLeft:before {
+  font-family: FontAwesome;
+  content: '\f060';
+}
 
 /* ссылки навигации */
 .block-links {
@@ -119,11 +127,11 @@
 }
 
 /* profiele */
-.logo-block {
+.avatar-block {
   width: 130px;
   height: 130px;
   border-radius: 100px;
-  background: var(--grey) url(../static/logo-no.png) center center no-repeat;
+  background: var(--grey);
   transition: 0.5;
   text-align: center;
   display: inline-block;
@@ -131,11 +139,22 @@
   position: relative;
   text-decoration: none;
   margin-bottom: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .avatar-icon {
+    color: #cdcdcd;
+    font-size: 42px;
+  }
 
   &:hover {
     background: #000;
     opacity: 0.5;
     cursor: pointer;
+    .avatar-icon {
+      opacity: 0.1;
+    }
   }
 
   &:after {
@@ -181,6 +200,10 @@
 
 .block-center_header {
   margin-bottom: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   flex: 0 0 auto;
 }
 

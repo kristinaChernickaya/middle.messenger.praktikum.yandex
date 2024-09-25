@@ -42,7 +42,7 @@ export default class ProfileEditPassword extends Block {
       return new Component.InputTextProfile(field);
     });
 
-    const logo = new Component.Logo({});
+    const avatar = new Component.Avatar({});
 
     const button = new Component.Button({
       text: 'Сохранить',
@@ -54,11 +54,21 @@ export default class ProfileEditPassword extends Block {
         },
       },
     });
+    const backButton = new Component.Button({
+      className: 'arrowLeft',
+      events: {
+        click: () => {
+          console.log('back event');
+        },
+      },
+    });
+
     super({
       ...props,
-      topContainer: logo,
+      topContainer: avatar,
       middleContainer: fields,
       bottomCenterContainer: button,
+      leftSideBar: backButton,
       blockLinks: new Component.BlockLinks({}),
     });
   }

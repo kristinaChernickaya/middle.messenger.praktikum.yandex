@@ -1,9 +1,6 @@
 import * as Page from './pages';
 import { renderDOM } from './utils/renderDOM';
 
-// Handlebars.registerPartial('TextProfile', Component.TextProfile);
-// Handlebars.registerPartial('InputTextProfile', Component.InputTextProfile);
-// Handlebars.registerPartial('LinkArrow', Component.LinkArrow);
 // Handlebars.registerPartial('LeftBar', Component.LeftBar);
 // Handlebars.registerPartial('ChartBlock', Component.ChartBlock);
 
@@ -13,7 +10,7 @@ export default class App {
 
   constructor() {
     this.state = {
-      currentPage: 'authorization',
+      currentPage: 'profile',
     };
     this.appElement = document.getElementById('app') as HTMLElement;
   }
@@ -47,6 +44,17 @@ export default class App {
         currentPage: this.state.currentPage,
       });
     }
+    if (this.state.currentPage === 'error-client') {
+      template = new Page.ErrorClient({
+        currentPage: this.state.currentPage,
+      });
+    }
+    if (this.state.currentPage === 'error-server') {
+      template = new Page.ErrorServer({
+        currentPage: this.state.currentPage,
+      });
+    }
+
     renderDOM('.app', template);
 
     // if (this.state.currentPage === 'charts') {
@@ -61,18 +69,7 @@ export default class App {
     //     currentPage: this.state.currentPage,
     //   });
     // }
-    // if (this.state.currentPage === 'server-error') {
-    //   template = Handlebars.compile(Page.ServerErrorPage);
-    //   this.appElement.innerHTML = template({
-    //     currentPage: this.state.currentPage,
-    //   });
-    // }
-    // if (this.state.currentPage === 'error') {
-    //   template = Handlebars.compile(Page.ErrorPage);
-    //   this.appElement.innerHTML = template({
-    //     currentPage: this.state.currentPage,
-    //   });
-    // }
+
     this.attachEventListeners();
   }
 
