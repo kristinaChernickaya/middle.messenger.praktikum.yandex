@@ -7,7 +7,7 @@ export default class App {
 
   constructor() {
     this.state = {
-      currentPage: 'chats',
+      currentPage: 'chart',
     };
     this.appElement = document.getElementById('app') as HTMLElement;
   }
@@ -56,14 +56,12 @@ export default class App {
         currentPage: this.state.currentPage,
       });
     }
+    if (this.state.currentPage === 'chart') {
+      template = new Page.ChatCurrent({
+        currentPage: this.state.currentPage,
+      });
+    }
     renderDOM('.app', template);
-
-    // if (this.state.currentPage === 'charts') {
-    //   template = Handlebars.compile(Page.Chats);
-    //   this.appElement.innerHTML = template({
-    //     currentPage: this.state.currentPage,
-    //   });
-    // }
 
     this.attachEventListeners();
   }

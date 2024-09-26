@@ -6,4 +6,4 @@ export { ProfileEditPassword } from './profile';
 export { ErrorServer } from './error';
 export { ErrorClient } from './error';
 export { ChatPreview } from './chat';
-export { Chats } from './chats';
+export { ChatCurrent } from './chat';

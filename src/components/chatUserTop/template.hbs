@@ -1,0 +1,18 @@
+<div class='chat_header border-bottom-block'>
+  <div class='chat_header_info'>
+    <div class='chat_header_left'>
+      {{#if img}}
+        <img src={{{img}}} />
+      {{else}}
+        <div class='user-img'></div>
+      {{/if}}
+      <div class='text-bold'>{{{userName}}}</div>
+    </div>
+    <div class='chat_header_right-menu'>
+      <a class='short-menu'>
+        <i class='fa-solid fa-ellipsis-vertical fa-xl'></i>
+      </a>
+    </div>
+
+  </div>
+</div>

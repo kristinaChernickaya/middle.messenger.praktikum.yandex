@@ -1,5 +1,5 @@
-@import url(reset.pcss);
-@import url(root.pcss);
+@import url(reset);
+@import url(root);
 
 .container {
   display: flex;
@@ -17,7 +17,7 @@
 .chat_footer {
   border-top: 1px solid var(--grey);
   padding: 10px 0px;
-  margin: 20px;
+  margin: 20px 0 0px;
 }
 
 .border-radius {
@@ -111,6 +111,16 @@
 .arrowLeft:before {
   font-family: FontAwesome;
   content: '\f060';
+}
+
+.arrowRight {
+  max-width: 40px;
+  border-radius: 50px;
+  margin: 0px 0px;
+}
+.arrowRight:before {
+  font-family: FontAwesome;
+  content: '\f061';
 }
 
 /* ссылки навигации */
@@ -324,6 +334,14 @@
   text-align: center;
   padding: 8px 0px;
   font-size: 12px;
+  outline: 1px solid var(--grey);
+  &:focus-visible {
+    outline: 1px solid var(--grey);
+  }
+  &:focus {
+    outline: 1px solid #c4c4c4;
+    //outline-color: red;
+  }
 }
 
 .search {
@@ -424,11 +442,24 @@
   padding: 8px 20px;
   margin-right: 10px;
   float: left;
-  width: 50%;
+  width: 93%;
 }
 
 .chat_header_info {
   height: 100%;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+}
+.chat_header_left {
+  display: flex;
+  align-items: center;
+}
+
+.chat_header_right-menu {
+  align-self: rigth;
+}
+
+.short-menu {
+  color: var(--blackColor);
 }

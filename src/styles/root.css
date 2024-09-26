@@ -5,15 +5,15 @@
   color: var(--blackColor);
   background-color: var(--whiteColor);
 
-/* Colors */
+  /* Colors */
   --white: #fff;
-  --blue: #3369F3;
-  --blueSoft: #E4EDFD;;
-  --black: #1E1E1E;
+  --blue: #3369f3;
+  --blueSoft: #e4edfd;
+  --black: #1e1e1e;
   --greyDark: #999;
-  --grey: #EFEFEF;
-  --greySoft: #FBFBFB;;
-  --red: #FF2F2F;
+  --grey: #efefef;
+  --greySoft: #fbfbfb;
+  --red: #ff2f2f;
 }
 
 h1 {
@@ -40,7 +40,7 @@ a {
     cursor: pointer;
     opacity: 0.8;
     text-decoration: none;
-	}
+  }
 }
 
 .text-bold {
