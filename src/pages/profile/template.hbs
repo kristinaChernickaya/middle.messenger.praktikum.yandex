@@ -7,21 +7,22 @@
       <div class='block-center_header'>
         {{{topContainer}}}
       </div>
-
-      <div class='block-center_middle'>
-        {{{middleContainer}}}
-      </div>
+      {{#if middleContainer}}
+        <div class='block-center_middle'>
+          {{{middleContainer}}}
+        </div>
+      {{/if}}
 
       {{#if bottomContainer}}
         <div class='block-center_footer profile_footer'>
           {{{bottomContainer}}}
         </div>
       {{/if}}
-      {{#if bottomCenterContainer}}
-        <div class='block-center_footer'>
-          {{{bottomCenterContainer}}}
-        </div>
+
+      {{#if form}}
+        {{{form}}}
       {{/if}}
+
     </div>
     {{{blockLinks}}}
   </div>

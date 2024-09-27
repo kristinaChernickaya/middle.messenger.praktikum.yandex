@@ -1,6 +1,7 @@
 import * as Component from '../../../components';
 import { TProps } from '../../../types';
 import Block from '../../../utils/block';
+import { validate, validateForm } from '../../../utils/validate';
 import template from '../template.hbs?raw';
 
 export default class Registration extends Block {
@@ -11,7 +12,15 @@ export default class Registration extends Block {
         input: new Component.Input({
           type: 'text',
           name: 'email',
-          id: 'email',
+          attr: {
+            'data-required': true,
+            'data-valid-email': true,
+          },
+          events: {
+            blur: (event: FocusEvent) => {
+              validate(event.target as HTMLInputElement);
+            },
+          },
         }),
       },
       {
@@ -19,7 +28,17 @@ export default class Registration extends Block {
         input: new Component.Input({
           type: 'text',
           name: 'login',
-          id: 'login',
+          attr: {
+            'data-required': true,
+            'data-max-length': 20,
+            'data-min-length': 3,
+            'data-valid-login': true,
+          },
+          events: {
+            blur: (event: Event) => {
+              validate(event.target as HTMLInputElement);
+            },
+          },
         }),
       },
       {
@@ -27,7 +46,15 @@ export default class Registration extends Block {
         input: new Component.Input({
           type: 'text',
           name: 'first_name',
-          id: 'first_name',
+          attr: {
+            'data-required': true,
+            'data-valid-name': true,
+          },
+          events: {
+            blur: (event: Event) => {
+              validate(event.target as HTMLInputElement);
+            },
+          },
         }),
       },
       {
@@ -35,7 +62,15 @@ export default class Registration extends Block {
         input: new Component.Input({
           type: 'text',
           name: 'second_name',
-          id: 'second_name',
+          attr: {
+            'data-required': true,
+            'data-valid-name': true,
+          },
+          events: {
+            blur: (event: Event) => {
+              validate(event.target as HTMLInputElement);
+            },
+          },
         }),
       },
       {
@@ -43,7 +78,17 @@ export default class Registration extends Block {
         input: new Component.Input({
           type: 'text',
           name: 'phone',
-          id: 'phone',
+          attr: {
+            'data-required': true,
+            'data-max-length': 15,
+            'data-min-length': 10,
+            'data-valid-phone': true,
+          },
+          events: {
+            blur: (event: Event) => {
+              validate(event.target as HTMLInputElement);
+            },
+          },
         }),
       },
       {
@@ -51,7 +96,17 @@ export default class Registration extends Block {
         input: new Component.Input({
           type: 'text',
           name: 'password',
-          id: 'password',
+          attr: {
+            'data-required': true,
+            'data-max-length': 40,
+            'data-min-length': 8,
+            'data-valid-password': true,
+          },
+          events: {
+            blur: (event: FocusEvent) => {
+              validate(event.target as HTMLInputElement);
+            },
+          },
         }),
       },
       {
@@ -59,10 +114,21 @@ export default class Registration extends Block {
         input: new Component.Input({
           type: 'password',
           name: 'password',
+          attr: {
+            'data-required': true,
+            'data-max-length': 40,
+            'data-min-length': 8,
+            'data-valid-password': true,
+          },
+          events: {
+            blur: (event: FocusEvent) => {
+              validate(event.target as HTMLInputElement);
+            },
+          },
         }),
       },
     ];
-    const fields = fieldsProps.map((field) => {
+    const inputBlocks = fieldsProps.map((field) => {
       return new Component.InputBlock(field);
     });
 
@@ -86,12 +152,21 @@ export default class Registration extends Block {
       },
     });
 
+    const form = new Component.Form({
+      button,
+      inputBlocks,
+      link,
+      events: {
+        submit: (event: Event) => {
+          validateForm(event);
+        },
+      },
+    });
+
     super({
       ...props,
       title: 'Регистрация',
-      button: button,
-      inputBlocks: fields,
-      link: link,
+      form,
       blockLinks: new Component.BlockLinks({}),
     });
   }

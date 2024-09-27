@@ -2,6 +2,7 @@ import { TProps } from '../../../types';
 import Block from '../../../utils/block';
 import * as Component from '../../../components';
 import template from '../template.hbs?raw';
+import { validateForm } from '../../../utils/validate';
 
 export default class ChatCurrent extends Block {
   constructor(props: TProps) {
@@ -11,14 +12,20 @@ export default class ChatCurrent extends Block {
     });
 
     const chatterBlock = new Component.ChatterBlock({});
-    const chatTypeBlock = new Component.ChatTypeBlock({});
+    const chatForm = new Component.ChatForm({
+      events: {
+        submit: (event: Event) => {
+          validateForm(event);
+        },
+      },
+    });
 
     super({
       ...props,
       leftSideBar: chatLeftSideBar,
       topContainer: chatUserTop,
       bodyContainer: chatterBlock,
-      footerContainer: chatTypeBlock,
+      footerContainer: chatForm,
       blockLinks: new Component.BlockLinks({}),
     });
   }

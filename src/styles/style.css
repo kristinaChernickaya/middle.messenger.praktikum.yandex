@@ -214,15 +214,22 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex: 0 0 auto;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  flex: 1 auto;
 }
 
 .block-center_middle {
   margin-bottom: 40px;
   flex: 1 0 auto;
 }
+
 .block-center_footer {
   flex: 0 0 auto;
+  margin-bottom: 10px;
 }
 
 .block-profile {
@@ -436,13 +443,18 @@
   width: 22px;
 }
 
+.textarea-block {
+  float: left;
+  width: 95%;
+}
+
 .input-message {
   border-radius: 30px;
   text-align: left;
   padding: 8px 20px;
   margin-right: 10px;
-  float: left;
-  width: 93%;
+  /* float: left; */
+  width: 96%;
 }
 
 .chat_header_info {
@@ -457,9 +469,21 @@
 }
 
 .chat_header_right-menu {
-  align-self: rigth;
+  align-self: right;
 }
 
 .short-menu {
   color: var(--blackColor);
+}
+
+/* validate */
+.text-error {
+  color: var(--red);
+  font-size: 10px;
+  font-weight: 400;
+  display: block;
+}
+
+.input-text_right {
+  text-align: right;
 }

@@ -1,33 +1,33 @@
 import { TProps } from '../../types';
 import Block from '../../utils/block';
-import * as Component from '../../components';
+import * as Component from '..';
 import template from './template.hbs?raw';
+import { validate } from '../../utils/validate';
 
-export default class ChatTypeBlock extends Block {
+export default class ChatForm extends Block {
   constructor(props: TProps) {
-    const sentButton = new Component.Button({
+    const buttonSubmit = new Component.Button({
       className: 'arrowRight',
-      events: {
-        click: () => {
-          console.log('sent event');
-        },
-      },
+      type: 'submit',
     });
 
     const textarea = new Component.Textarea({
       className: 'input-grey',
       name: 'message',
       placeholderText: 'Сообщение',
+      attr: {
+        'data-required': true,
+      },
       events: {
-        click: () => {
-          console.log('sent event');
+        blur: (event: FocusEvent) => {
+          validate(event.target as HTMLInputElement);
         },
       },
     });
 
     super({
       ...props,
-      sentButton: sentButton,
+      sentButton: buttonSubmit,
       textarea: textarea,
     });
   }

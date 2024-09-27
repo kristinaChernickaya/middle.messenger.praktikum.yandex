@@ -13,4 +13,6 @@ export { chatBlock } from './chatBlock';
 export { ChatLeftSideBar } from './chatLeftSideBar';
 export { ChatUserTop } from './chatUserTop';
 export { ChatterBlock } from './chatterBlock';
-export { ChatTypeBlock } from './chatTypeBlock';
+export { ChatForm } from './chatForm';
+export { Form } from './form';
+export { ProfileForm } from './profileForm';

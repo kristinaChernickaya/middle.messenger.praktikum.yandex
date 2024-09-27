@@ -2,6 +2,7 @@ import { TProps } from '../../../types';
 import Block from '../../../utils/block';
 import * as Component from '../../../components';
 import template from '../template.hbs?raw';
+import { validate, validateForm } from '../../../utils/validate';
 
 export default class ProfileEdit extends Block {
   constructor(props: TProps) {
@@ -12,8 +13,16 @@ export default class ProfileEdit extends Block {
           type: 'text',
           placeholderText: 'pochta@yandex.ru',
           name: 'email',
-          id: 'email',
           className: 'text-profile-block_input',
+          attr: {
+            'data-required': true,
+            'data-valid-email': true,
+          },
+          events: {
+            blur: (event: FocusEvent) => {
+              validate(event.target as HTMLInputElement);
+            },
+          },
         }),
       },
       {
@@ -22,8 +31,18 @@ export default class ProfileEdit extends Block {
           type: 'text',
           placeholderText: 'JohnJonson',
           name: 'login',
-          id: 'login',
           className: 'text-profile-block_input',
+          attr: {
+            'data-required': true,
+            'data-max-length': 20,
+            'data-min-length': 3,
+            'data-valid-login': true,
+          },
+          events: {
+            blur: (event: Event) => {
+              validate(event.target as HTMLInputElement);
+            },
+          },
         }),
       },
       {
@@ -32,8 +51,16 @@ export default class ProfileEdit extends Block {
           type: 'text',
           placeholderText: 'John',
           name: 'first_name',
-          id: 'first_name',
           className: 'text-profile-block_input',
+          attr: {
+            'data-required': true,
+            'data-valid-name': true,
+          },
+          events: {
+            blur: (event: Event) => {
+              validate(event.target as HTMLInputElement);
+            },
+          },
         }),
       },
       {
@@ -42,8 +69,16 @@ export default class ProfileEdit extends Block {
           type: 'text',
           placeholderText: 'Doe',
           name: 'second_name',
-          id: 'second_name',
           className: 'text-profile-block_input',
+          attr: {
+            'data-required': true,
+            'data-valid-name': true,
+          },
+          events: {
+            blur: (event: Event) => {
+              validate(event.target as HTMLInputElement);
+            },
+          },
         }),
       },
       {
@@ -52,7 +87,6 @@ export default class ProfileEdit extends Block {
           type: 'text',
           placeholderText: 'John',
           name: 'display_name',
-          id: 'display_name',
           className: 'text-profile-block_input',
         }),
       },
@@ -62,8 +96,18 @@ export default class ProfileEdit extends Block {
           type: 'text',
           placeholderText: '+7 (909) 967 30 30',
           name: 'phone',
-          id: 'phone',
           className: 'text-profile-block_input',
+          attr: {
+            'data-required': true,
+            'data-max-length': 15,
+            'data-min-length': 10,
+            'data-valid-phone': true,
+          },
+          events: {
+            blur: (event: Event) => {
+              validate(event.target as HTMLInputElement);
+            },
+          },
         }),
       },
     ];
@@ -74,15 +118,10 @@ export default class ProfileEdit extends Block {
 
     const avatar = new Component.Avatar({});
 
-    const button = new Component.Button({
+    const buttonSubmit = new Component.Button({
       text: 'Сохранить',
       withInternalId: true,
-      attr: {},
-      events: {
-        click: () => {
-          console.log('Сохранить event');
-        },
-      },
+      type: 'submit',
     });
     const backButton = new Component.Button({
       className: 'arrowLeft',
@@ -93,11 +132,20 @@ export default class ProfileEdit extends Block {
       },
     });
 
+    const form = new Component.ProfileForm({
+      fields,
+      buttonSubmit,
+      events: {
+        submit: (event: Event) => {
+          validateForm(event);
+        },
+      },
+    });
+
     super({
       ...props,
       topContainer: avatar,
-      middleContainer: fields,
-      bottomCenterContainer: button,
+      form,
       leftSideBar: backButton,
       blockLinks: new Component.BlockLinks({}),
     });

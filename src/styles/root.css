@@ -57,8 +57,3 @@ a {
   color: var(--greyDark);
   font-size: 9px;
 }
-.error {
-  color: var(--red);
-  font-size: 10px;
-  font-weight: 400;
-}

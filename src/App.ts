@@ -7,7 +7,7 @@ export default class App {
 
   constructor() {
     this.state = {
-      currentPage: 'chart',
+      currentPage: 'chat',
     };
     this.appElement = document.getElementById('app') as HTMLElement;
   }
@@ -41,6 +41,16 @@ export default class App {
         currentPage: this.state.currentPage,
       });
     }
+    if (this.state.currentPage === 'chats') {
+      template = new Page.ChatPreview({
+        currentPage: this.state.currentPage,
+      });
+    }
+    if (this.state.currentPage === 'chat') {
+      template = new Page.ChatCurrent({
+        currentPage: this.state.currentPage,
+      });
+    }
     if (this.state.currentPage === 'error-client') {
       template = new Page.ErrorClient({
         currentPage: this.state.currentPage,
@@ -51,18 +61,7 @@ export default class App {
         currentPage: this.state.currentPage,
       });
     }
-    if (this.state.currentPage === 'chats') {
-      template = new Page.ChatPreview({
-        currentPage: this.state.currentPage,
-      });
-    }
-    if (this.state.currentPage === 'chart') {
-      template = new Page.ChatCurrent({
-        currentPage: this.state.currentPage,
-      });
-    }
     renderDOM('.app', template);
-
     this.attachEventListeners();
   }
 

@@ -1,6 +1,7 @@
 import * as Component from '../../../components';
 import { TProps } from '../../../types';
 import Block from '../../../utils/block';
+import { validate, validateForm } from '../../../utils/validate';
 import template from '../template.hbs?raw';
 
 export default class Authorization extends Block {
@@ -11,7 +12,17 @@ export default class Authorization extends Block {
         input: new Component.Input({
           type: 'text',
           name: 'login',
-          id: 'login',
+          attr: {
+            'data-required': true,
+            'data-max-length': 20,
+            'data-min-length': 3,
+            'data-valid-login': true,
+          },
+          events: {
+            blur: (event: Event) => {
+              validate(event.target as HTMLInputElement);
+            },
+          },
         }),
       },
       {
@@ -19,23 +30,28 @@ export default class Authorization extends Block {
         input: new Component.Input({
           type: 'password',
           name: 'password',
-          id: 'login',
+          attr: {
+            'data-required': true,
+            'data-max-length': 40,
+            'data-min-length': 8,
+            'data-valid-password': true,
+          },
+          events: {
+            blur: (event: FocusEvent) => {
+              validate(event.target as HTMLInputElement);
+            },
+          },
         }),
       },
     ];
-    const fields = fieldsProps.map((field) => {
+    const inputBlocks = fieldsProps.map((field) => {
       return new Component.InputBlock(field);
     });
 
     const button = new Component.Button({
       text: 'Авторизация',
+      type: 'submit',
       withInternalId: true,
-      attr: {},
-      events: {
-        click: () => {
-          console.log('button event');
-        },
-      },
     });
 
     const link = new Component.Link({
@@ -48,12 +64,21 @@ export default class Authorization extends Block {
       },
     });
 
+    const form = new Component.Form({
+      button,
+      inputBlocks,
+      link,
+      events: {
+        submit: (event: Event) => {
+          validateForm(event);
+        },
+      },
+    });
+
     super({
       ...props,
       title: 'Авторизация',
-      button: button,
-      inputBlocks: fields,
-      link: link,
+      form,
       blockLinks: new Component.BlockLinks({}),
     });
   }
