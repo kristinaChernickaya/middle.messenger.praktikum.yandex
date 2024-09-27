@@ -1,9 +1,9 @@
-import { TProps } from '../../../types';
-import Block from '../../../utils/block';
+import * as Service from '../../../services';
 import * as Component from '../../../components';
+import { TProps } from '../../../types';
 import template from '../template.hbs?raw';
 
-export default class ChatPreview extends Block {
+export default class ChatPreview extends Service.Block {
   constructor(props: TProps) {
     const chatLeftSideBar = new Component.ChatLeftSideBar({});
 

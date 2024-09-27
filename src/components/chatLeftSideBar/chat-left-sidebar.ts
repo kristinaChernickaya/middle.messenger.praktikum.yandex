@@ -1,7 +1,7 @@
 import { TProps } from '../../types';
-import Block from '../../utils/block';
 import * as Component from '../../components';
 import template from './template.hbs?raw';
+import { Block } from '../../services';
 
 export default class ChatLeftSideBar extends Block {
   constructor(props: TProps) {

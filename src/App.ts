@@ -1,5 +1,5 @@
 import * as Page from './pages';
-import { renderDOM } from './utils/renderDOM';
+import { renderDOM } from './services';
 
 export default class App {
   state: { currentPage: string };

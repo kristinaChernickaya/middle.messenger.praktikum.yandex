@@ -1,11 +1,9 @@
-import { TProps } from '../../../types';
-import Block from '../../../utils/block';
 import * as Component from '../../../components';
+import * as Service from '../../../services';
+import { TProps } from '../../../types';
 import template from '../template.hbs?raw';
-import { validate, validateForm } from '../../../utils/validate';
-import { getDataForm } from '../../../utils/get-data-form';
 
-export default class ProfileEditPassword extends Block {
+export default class ProfileEditPassword extends Service.Block {
   constructor(props: TProps) {
     const fieldsProps = [
       {
@@ -23,7 +21,7 @@ export default class ProfileEditPassword extends Block {
           },
           events: {
             blur: (event: FocusEvent) => {
-              validate(event.target as HTMLInputElement);
+              Service.validate(event.target as HTMLInputElement);
             },
           },
         }),
@@ -43,7 +41,7 @@ export default class ProfileEditPassword extends Block {
           },
           events: {
             blur: (event: FocusEvent) => {
-              validate(event.target as HTMLInputElement);
+              Service.validate(event.target as HTMLInputElement);
             },
           },
         }),
@@ -63,7 +61,7 @@ export default class ProfileEditPassword extends Block {
           },
           events: {
             blur: (event: FocusEvent) => {
-              validate(event.target as HTMLInputElement);
+              Service.validate(event.target as HTMLInputElement);
             },
           },
         }),
@@ -96,9 +94,9 @@ export default class ProfileEditPassword extends Block {
       buttonSubmit,
       events: {
         submit: (event: Event) => {
-          validateForm(event);
-          if (validateForm(event)) {
-            getDataForm(event);
+          Service.validateForm(event);
+          if (Service.validateForm(event)) {
+            Service.getDataForm(event);
           }
         },
       },

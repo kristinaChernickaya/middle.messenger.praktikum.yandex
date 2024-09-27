@@ -1,5 +1,5 @@
+import { Block } from '../../services';
 import { TProps } from '../../types';
-import Block from '../../utils/block';
 import template from './template.hbs?raw';
 
 export default class Textarea extends Block {

@@ -1,9 +1,9 @@
-import { TProps } from '../../../types';
-import Block from '../../../utils/block';
 import * as Component from '../../../components';
+import * as Service from '../../../services';
+import { TProps } from '../../../types';
 import template from '../template.hbs?raw';
 
-export default class ProfileInfo extends Block {
+export default class ProfileInfo extends Service.Block {
   constructor(props: TProps) {
     const linksProps = [
       {

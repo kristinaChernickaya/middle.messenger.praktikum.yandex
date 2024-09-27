@@ -1,11 +1,9 @@
 import * as Component from '../../../components';
+import * as Service from '../../../services';
 import { TProps } from '../../../types';
-import Block from '../../../utils/block';
-import { getDataForm } from '../../../utils/get-data-form';
-import { validate, validateForm } from '../../../utils/validate';
 import template from '../template.hbs?raw';
 
-export default class Authorization extends Block {
+export default class Authorization extends Service.Block {
   constructor(props: TProps) {
     const fieldsProps = [
       {
@@ -21,7 +19,7 @@ export default class Authorization extends Block {
           },
           events: {
             blur: (event: Event) => {
-              validate(event.target as HTMLInputElement);
+              Service.validate(event.target as HTMLInputElement);
             },
           },
         }),
@@ -39,7 +37,7 @@ export default class Authorization extends Block {
           },
           events: {
             blur: (event: FocusEvent) => {
-              validate(event.target as HTMLInputElement);
+              Service.validate(event.target as HTMLInputElement);
             },
           },
         }),
@@ -71,9 +69,9 @@ export default class Authorization extends Block {
       link,
       events: {
         submit: (event: Event) => {
-          validateForm(event);
-          if (validateForm(event)) {
-            getDataForm(event);
+          Service.validateForm(event);
+          if (Service.validateForm(event)) {
+            Service.getDataForm(event);
           }
         },
       },
