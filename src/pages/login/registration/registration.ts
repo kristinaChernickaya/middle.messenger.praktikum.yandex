@@ -1,6 +1,7 @@
 import * as Component from '../../../components';
 import { TProps } from '../../../types';
 import Block from '../../../utils/block';
+import { getDataForm } from '../../../utils/get-data-form';
 import { validate, validateForm } from '../../../utils/validate';
 import template from '../template.hbs?raw';
 
@@ -94,7 +95,7 @@ export default class Registration extends Block {
       {
         label: 'Пароль',
         input: new Component.Input({
-          type: 'text',
+          type: 'password',
           name: 'password',
           attr: {
             'data-required': true,
@@ -159,6 +160,9 @@ export default class Registration extends Block {
       events: {
         submit: (event: Event) => {
           validateForm(event);
+          if (validateForm(event)) {
+            getDataForm(event);
+          }
         },
       },
     });

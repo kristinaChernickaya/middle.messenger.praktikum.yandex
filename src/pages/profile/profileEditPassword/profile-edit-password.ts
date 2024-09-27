@@ -3,6 +3,7 @@ import Block from '../../../utils/block';
 import * as Component from '../../../components';
 import template from '../template.hbs?raw';
 import { validate, validateForm } from '../../../utils/validate';
+import { getDataForm } from '../../../utils/get-data-form';
 
 export default class ProfileEditPassword extends Block {
   constructor(props: TProps) {
@@ -96,6 +97,9 @@ export default class ProfileEditPassword extends Block {
       events: {
         submit: (event: Event) => {
           validateForm(event);
+          if (validateForm(event)) {
+            getDataForm(event);
+          }
         },
       },
     });

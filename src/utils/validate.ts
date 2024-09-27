@@ -33,7 +33,7 @@ function executeRules(element: HTMLInputElement): [boolean, string] {
   if (maxLength && element.value.length > Number(maxLength))
     return [false, `Максимальное число символов: ${maxLength}`];
   if (validName && !/^[A-ZА-Я][a-zа-я-]*$/.test(element.value))
-    return [false, 'Только латиница или кириллица (первая буква заглавная), допускается -'];
+    return [false, 'Только латиница или кириллица (первая буква заглавная)'];
   if (validLogin && !/^(?!\d+$)[A-Za-z0-9_-]+$/.test(element.value))
     return [false, 'Только латиница без спецсимволов (только - и _)'];
   if (validEmail && !/^[A-Za-z0-9_-]+@[A-Za-z0-9_-]+\.[A-Za-z]+$/.test(element.value))
@@ -53,18 +53,20 @@ export function validate(element: HTMLInputElement): boolean {
   return isValid;
 }
 
-export function validateForm(event: Event): void {
+export function validateForm(event: Event): boolean {
   event.preventDefault();
 
   const form = event.target as HTMLFormElement;
   let validFormlist: boolean[] = [];
-  const inputs = form.querySelectorAll('input, select, checkbox, textarea');
-  inputs.forEach((input) => {
-    validate((input as HTMLInputElement) || HTMLTextAreaElement);
-    validFormlist.push(validate((input as HTMLInputElement) || HTMLTextAreaElement));
+  const elements = form.querySelectorAll('input, select, checkbox, textarea');
+  elements.forEach((element) => {
+    validate((element as HTMLInputElement) || HTMLTextAreaElement);
+    validFormlist.push(validate((element as HTMLInputElement) || HTMLTextAreaElement));
   });
 
   if (!validFormlist.includes(false)) {
-    console.log('Форма отправлена');
+    return true;
+  } else {
+    return false;
   }
 }
