@@ -32,15 +32,14 @@ export default class Block {
     this.id = makeUUID();
     this.props = this._makePropsProxy({ ...props, id: this.id });
     this.eventBus = () => eventBus;
-
     this._registerEvents(eventBus);
-
     eventBus.emit(Block.EVENTS.INIT);
   }
   _registerEvents(eventBus: EventBus<unknown>) {
     eventBus.on(Block.EVENTS.INIT, this.init.bind(this));
     eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
     eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this));
+    //@ts-ignore
     eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
   }
 
@@ -80,19 +79,28 @@ export default class Block {
     return element;
   }
 
-  _render() {
-    this._removeEvents();
-    this._element!.innerHTML = '';
+  render(): DocumentFragment {
+    return this.render();
+  }
 
-    const firstElement = this.render().firstElementChild;
-    this._element?.replaceWith(firstElement);
-    this._element = firstElement;
+  _render(): void {
+    this._removeEvents();
+    if (this._element) {
+      this._element.innerHTML = '';
+    }
+
+    const renderResult = this.render();
+    console.log(this);
+    const firstElement = renderResult.firstElementChild as HTMLElement;
+    if (firstElement) {
+      this._element?.replaceWith(firstElement);
+      this._element = firstElement;
+    }
 
     this._addEvents();
     this.addAttributes();
   }
 
-  render() {}
   componentDidMount() {}
 
   getContent() {
@@ -107,15 +115,16 @@ export default class Block {
     this.componentDidMount();
 
     Object.values(this.children).forEach((child) => {
-      child?.dispatchComponentDidMount();
+      const blockChild = child as Block;
+      blockChild.dispatchComponentDidMount();
     });
   }
 
-  _componentDidUpdate(oldProps: TProps, newProps: TProps) {
+  _componentDidUpdate(oldProps: TProps, newProps: TProps): void {
     this.componentDidUpdate(oldProps, newProps);
   }
 
-  componentDidUpdate(oldProps: any, newProps: any) {
+  componentDidUpdate(oldProps: TProps, newProps: TProps): void {
     if (oldProps !== newProps) {
       this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
     }
@@ -130,39 +139,45 @@ export default class Block {
     this.eventBus().emit(Block.EVENTS.FLOW_CDU);
   };
 
-  compile(template: string, props: TProps) {
-    const propsAndStubs = { ...props };
+  compile(template: string, props: TProps): DocumentFragment {
+    const propsAndStubs: TProps = { ...props };
 
     Object.entries(this.children).forEach(([key, child]) => {
-      propsAndStubs[key] = `<div data-id="${child?.id}"></div>`;
+      const blockChild = child as Block;
+      propsAndStubs[key] = `<div data-id="${blockChild.id}"></div>`;
     });
 
     Object.entries(this.lists).forEach(([key, list]) => {
-      propsAndStubs[key] = `<div data-id="${list?.id}"></div>`;
+      const blockList = list as Block[];
+      propsAndStubs[key] = `<div data-id="${blockList.map((item) => item.id).join(',')}"></div>`;
     });
 
     const compiledTemplate = Handlebars.compile(template);
     const fragment = document.createElement('template');
 
-    fragment.innerHTML = compiledTemplate({ ...propsAndStubs });
+    fragment.innerHTML = compiledTemplate(propsAndStubs);
 
     Object.values(this.children).forEach((child) => {
-      const stub = fragment.content.querySelector(`[data-id="${child?.id}"]`);
+      const blockChild = child as Block;
+      const stub = fragment.content.querySelector(`[data-id="${blockChild.id}"]`);
       if (stub) {
-        stub.replaceWith(child.getContent());
+        stub.replaceWith(blockChild.getContent() as Node);
       }
     });
 
     Object.entries(this.lists).forEach(([, list]) => {
-      const listContent = this._createDocumentElement('template');
-      list.forEach((item) => {
+      const blockList = list as Block[];
+      const listContent = this._createDocumentElement('template') as HTMLTemplateElement;
+      blockList.forEach((item) => {
         if (item instanceof Block) {
-          listContent.content.append(item.getContent());
+          listContent.content.append(item.getContent() as Node);
         } else {
-          listContent.content.append(`${item}`);
+          listContent.content.append(document.createTextNode(item));
         }
       });
-      const stub = fragment.content.querySelector(`[data-id="${list.id}"]`);
+      const stub = fragment.content.querySelector(
+        `[data-id="${blockList.map((item) => item.id).join(',')}"]`,
+      );
       if (stub) {
         stub.replaceWith(listContent.content);
       }
@@ -214,24 +229,21 @@ export default class Block {
     }
   }
 
-  _makePropsProxy(props = {}) {
-    // const updateProps = (oldProps, newProps) => {
-    //   this.eventBus().emit(Block.EVENTS.FLOW_CDU, { oldProps, newProps });
-    // };
+  _makePropsProxy(props: TProps = {}): TProps {
     const self = this;
     const proxyProps = new Proxy(props, {
       get(target: TProps, prop: string) {
-        if (prop.indexOf('_') === 0) {
-          throw Error('Нет прав');
+        if (prop.startsWith('_')) {
+          throw new Error('Нет прав');
         }
 
         const value = target[prop];
         return typeof value === 'function' ? value.bind(target) : value;
       },
 
-      set(target: TProps, prop: string, value) {
-        if (prop.indexOf('_') === 0 || !value) {
-          throw Error('Нет прав');
+      set(target: TProps, prop: string, value: any) {
+        if (prop.startsWith('_') || !value) {
+          throw new Error('Нет прав');
         }
         const oldProps = { ...target };
         target[prop] = value;
@@ -241,7 +253,7 @@ export default class Block {
       },
 
       deleteProperty() {
-        throw Error('Нет прав');
+        throw new Error('Нет прав');
       },
     });
 

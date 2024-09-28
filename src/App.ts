@@ -1,9 +1,13 @@
 import * as Page from './pages';
 import { renderDOM } from './services';
 
+interface AppState {
+  currentPage: string;
+}
+
 export default class App {
-  state: { currentPage: string };
-  appElement: HTMLElement = document.getElementById('app')!;
+  state: AppState;
+  appElement: HTMLElement;
 
   constructor() {
     this.state = {
@@ -12,60 +16,59 @@ export default class App {
     this.appElement = document.getElementById('app') as HTMLElement;
   }
 
-  render() {
-    let template;
+  render(): void {
+    let template:
+      | Page.Authorization
+      | Page.Registration
+      | Page.ProfileInfo
+      | Page.ProfileEdit
+      | Page.ProfileEditPassword
+      | Page.ChatPreview
+      | Page.ChatCurrent
+      | Page.ErrorClient
+      | Page.ErrorServer
+      | undefined;
     this.appElement.innerHTML = '';
 
-    if (this.state.currentPage === 'authorization') {
-      template = new Page.Authorization({
-        currentPage: this.state.currentPage,
-      });
+    switch (this.state.currentPage) {
+      case 'authorization':
+        template = new Page.Authorization({ currentPage: this.state.currentPage });
+        break;
+      case 'registration':
+        template = new Page.Registration({ currentPage: this.state.currentPage });
+        break;
+      case 'profile':
+        template = new Page.ProfileInfo({ currentPage: this.state.currentPage });
+        break;
+      case 'profile-edit':
+        template = new Page.ProfileEdit({ currentPage: this.state.currentPage });
+        break;
+      case 'profile-edit-password':
+        template = new Page.ProfileEditPassword({ currentPage: this.state.currentPage });
+        break;
+      case 'chats':
+        template = new Page.ChatPreview({ currentPage: this.state.currentPage });
+        break;
+      case 'chat':
+        template = new Page.ChatCurrent({ currentPage: this.state.currentPage });
+        break;
+      case 'error-client':
+        template = new Page.ErrorClient({ currentPage: this.state.currentPage });
+        break;
+      case 'error-server':
+        template = new Page.ErrorServer({ currentPage: this.state.currentPage });
+        break;
+      default:
+        template = undefined;
     }
-    if (this.state.currentPage === 'registration') {
-      template = new Page.Registration({
-        currentPage: this.state.currentPage,
-      });
+
+    if (template) {
+      renderDOM('.app', template);
     }
-    if (this.state.currentPage === 'profile') {
-      template = new Page.ProfileInfo({
-        currentPage: this.state.currentPage,
-      });
-    }
-    if (this.state.currentPage === 'profile-edit') {
-      template = new Page.ProfileEdit({
-        currentPage: this.state.currentPage,
-      });
-    }
-    if (this.state.currentPage === 'profile-edit-password') {
-      template = new Page.ProfileEditPassword({
-        currentPage: this.state.currentPage,
-      });
-    }
-    if (this.state.currentPage === 'chats') {
-      template = new Page.ChatPreview({
-        currentPage: this.state.currentPage,
-      });
-    }
-    if (this.state.currentPage === 'chat') {
-      template = new Page.ChatCurrent({
-        currentPage: this.state.currentPage,
-      });
-    }
-    if (this.state.currentPage === 'error-client') {
-      template = new Page.ErrorClient({
-        currentPage: this.state.currentPage,
-      });
-    }
-    if (this.state.currentPage === 'error-server') {
-      template = new Page.ErrorServer({
-        currentPage: this.state.currentPage,
-      });
-    }
-    renderDOM('.app', template);
     this.attachEventListeners();
   }
 
-  attachEventListeners() {
+  attachEventListeners(): void {
     const linkNavigation = document.querySelectorAll('.block-links_navigation')!;
     linkNavigation.forEach((link) => {
       link.addEventListener('click', (e) => {
@@ -75,7 +78,7 @@ export default class App {
     });
   }
 
-  changePage(page: string) {
+  changePage(page: string): void {
     this.state.currentPage = page;
     this.render();
   }
