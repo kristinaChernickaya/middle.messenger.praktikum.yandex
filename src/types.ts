@@ -4,6 +4,15 @@ export type EventType = {
 
 export type TButtonProps = TBlockProps & {
   text: string;
+  className?: string;
+  type: string;
+};
+
+export type TInputProps = TBlockProps & {
+  name: string;
+  className?: string;
+  type: string;
+  placeholderText?: string;
 };
 
 export type TAttr = {
