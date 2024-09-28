@@ -90,7 +90,6 @@ export default class Block {
     }
 
     const renderResult = this.render();
-    console.log(this);
     const firstElement = renderResult.firstElementChild as HTMLElement;
     if (firstElement) {
       this._element?.replaceWith(firstElement);

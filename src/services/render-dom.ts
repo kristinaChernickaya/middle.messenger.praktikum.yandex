@@ -1,6 +1,4 @@
-import Block from './Block';
-
-export function renderDOM(query: string, block: Block): Element | null {
+export function renderDOM(query: string, block: any): Element | null {
   const root = document.querySelector(query);
   if (root) {
     root.appendChild(block.getContent() as Node);
