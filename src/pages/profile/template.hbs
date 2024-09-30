@@ -1,0 +1,29 @@
+<main>
+  <div class='left-block position-absolute center-items'>
+    {{{leftSideBar}}}
+  </div>
+  <div class='container'>
+    <div class='block-center block-profile'>
+      <div class='block-center_header'>
+        {{{topContainer}}}
+      </div>
+      {{#if middleContainer}}
+        <div class='block-center_middle'>
+          {{{middleContainer}}}
+        </div>
+      {{/if}}
+
+      {{#if bottomContainer}}
+        <div class='block-center_footer profile_footer'>
+          {{{bottomContainer}}}
+        </div>
+      {{/if}}
+
+      {{#if form}}
+        {{{form}}}
+      {{/if}}
+
+    </div>
+    {{{blockLinks}}}
+  </div>
+</main>
