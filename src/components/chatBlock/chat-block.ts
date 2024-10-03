@@ -7,7 +7,7 @@ export default class chatBlock extends Block {
     super(props);
   }
 
-  render() {
+  override render() {
     return this.compile(template, this.props);
   }
 }

@@ -7,7 +7,7 @@ export default class Input extends Block {
     super(props);
   }
 
-  render() {
+  override render() {
     return this.compile(template, { ...this.props });
   }
 }

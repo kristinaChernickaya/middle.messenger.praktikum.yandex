@@ -3,7 +3,7 @@ import Handlebars from 'handlebars';
 import { v4 as makeUUID } from 'uuid';
 import { TProps, TEvent, TAttr } from '../types';
 
-export default class Block {
+export default abstract class Block {
   static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
@@ -11,32 +11,28 @@ export default class Block {
     FLOW_CDU: 'flow:component-did-update',
   };
   _element: HTMLElement | null = null;
-  _meta: { props: {} };
+
   id: string = '';
   children: {};
   lists: {};
   props: TProps;
   eventBus: () => EventBus<unknown>;
 
-  constructor(propsAndChildren = {}) {
-    const { children, props, lists } = this._getChildrenAndList(propsAndChildren);
+  constructor(propsChildrenLists = {}) {
+    console.log(propsChildrenLists);
+    const { children, props, lists } = this._getChildrenAndList(propsChildrenLists);
     this.children = children;
     this.lists = lists;
-
-    const eventBus = new EventBus();
-
-    this._meta = {
-      props,
-    };
-
     this.id = makeUUID();
     this.props = this._makePropsProxy({ ...props, id: this.id });
+
+    const eventBus = new EventBus();
     this.eventBus = () => eventBus;
     this._registerEvents(eventBus);
     eventBus.emit(Block.EVENTS.INIT);
   }
   _registerEvents(eventBus: EventBus<unknown>) {
-    eventBus.on(Block.EVENTS.INIT, this.init.bind(this));
+    eventBus.on(Block.EVENTS.INIT, this._init.bind(this));
     eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
     eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this));
     //@ts-ignore
@@ -65,25 +61,25 @@ export default class Block {
     return this._element;
   }
 
-  init() {
+  public _init() {
     this._createResources();
     this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
   }
 
-  _createResources() {
+  private _createResources() {
     this._element = this._createDocumentElement('div');
   }
 
-  _createDocumentElement(tagName: string) {
+  private _createDocumentElement(tagName: string) {
     const element = document.createElement(tagName);
     return element;
   }
 
-  render(): DocumentFragment {
+  public render(): DocumentFragment {
     return this.render();
   }
 
-  _render(): void {
+  private _render(): void {
     this._removeEvents();
     if (this._element) {
       this._element.innerHTML = '';
@@ -97,20 +93,20 @@ export default class Block {
     }
 
     this._addEvents();
-    this.addAttributes();
+    this._addAttributes();
   }
 
-  componentDidMount() {}
+  public componentDidMount() {}
 
-  getContent() {
+  public getContent() {
     return this.element;
   }
 
-  dispatchComponentDidMount() {
+  public dispatchComponentDidMount() {
     this.eventBus().emit(Block.EVENTS.FLOW_CDM);
   }
 
-  _componentDidMount() {
+  private _componentDidMount() {
     this.componentDidMount();
 
     Object.values(this.children).forEach((child) => {
@@ -119,17 +115,17 @@ export default class Block {
     });
   }
 
-  _componentDidUpdate(oldProps: TProps, newProps: TProps): void {
+  private _componentDidUpdate(oldProps: TProps, newProps: TProps): void {
     this.componentDidUpdate(oldProps, newProps);
   }
 
-  componentDidUpdate(oldProps: TProps, newProps: TProps): void {
+  public componentDidUpdate(oldProps: TProps, newProps: TProps): void {
     if (oldProps !== newProps) {
       this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
     }
   }
 
-  setProps = (nextProps: any) => {
+  public setProps = (nextProps: any) => {
     if (!nextProps) {
       return;
     }
@@ -185,7 +181,7 @@ export default class Block {
     return fragment.content;
   }
 
-  addAttributes() {
+  private _addAttributes() {
     const { attr = {} } = this.props;
 
     if (this.props.withInternalId) {
@@ -199,7 +195,7 @@ export default class Block {
     });
   }
 
-  _addEvents() {
+  private _addEvents() {
     const { events = {} } = this.props;
 
     Object.keys(events as TEvent).forEach((eventName) => {
@@ -207,28 +203,28 @@ export default class Block {
     });
   }
 
-  _removeEvents() {
+  private _removeEvents() {
     const { events = {} } = this.props;
     Object.keys(events as TEvent).forEach((eventName) => {
       this._element?.removeEventListener(eventName, (events as TEvent)[eventName]);
     });
   }
 
-  show(): void {
+  public show(): void {
     const content = this.getContent();
     if (content) {
       content.style.display = 'block';
     }
   }
 
-  hide(): void {
+  public hide(): void {
     const content = this.getContent();
     if (content) {
       content.style.display = 'none';
     }
   }
 
-  _makePropsProxy(props: TProps = {}): TProps {
+  private _makePropsProxy(props: TProps = {}): TProps {
     const self = this;
     const proxyProps = new Proxy(props, {
       get(target: TProps, prop: string) {

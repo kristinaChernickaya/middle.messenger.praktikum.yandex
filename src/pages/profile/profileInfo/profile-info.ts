@@ -99,7 +99,7 @@ export default class ProfileInfo extends Service.Block {
     });
   }
 
-  render() {
+  override render() {
     return this.compile(template, { ...this.props });
   }
 }

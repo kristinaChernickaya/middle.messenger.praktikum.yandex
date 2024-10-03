@@ -111,7 +111,7 @@ export default class ProfileEditPassword extends Service.Block {
     });
   }
 
-  render() {
+  override render() {
     return this.compile(template, { ...this.props });
   }
 }

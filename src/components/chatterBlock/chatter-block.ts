@@ -16,7 +16,7 @@ export default class ChatterBlock extends Block {
     });
   }
 
-  render() {
+  override render() {
     return this.compile(template, this.props);
   }
 }

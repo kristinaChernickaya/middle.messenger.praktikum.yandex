@@ -23,7 +23,7 @@ export default class ErrorServer extends Service.Block {
     });
   }
 
-  render() {
+  override render() {
     return this.compile(template, this.props);
   }
 }

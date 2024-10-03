@@ -32,7 +32,7 @@ export default class ChatCurrent extends Service.Block {
     });
   }
 
-  render() {
+  override render() {
     return this.compile(template, { ...this.props });
   }
 }

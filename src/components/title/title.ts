@@ -7,7 +7,7 @@ export default class Title extends Block {
     super(props);
   }
 
-  render() {
+  override render() {
     return this.compile(template, this.props);
   }
 }

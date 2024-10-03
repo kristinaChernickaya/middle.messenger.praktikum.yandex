@@ -31,7 +31,7 @@ export default class ChatForm extends Service.Block {
     });
   }
 
-  render() {
+  override render() {
     return this.compile(template, this.props);
   }
 }

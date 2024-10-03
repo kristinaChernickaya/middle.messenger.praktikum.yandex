@@ -55,7 +55,7 @@ export default class ChatLeftSideBar extends Block {
     });
   }
 
-  render() {
+  override render() {
     return this.compile(template, { ...this.props });
   }
 }

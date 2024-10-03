@@ -9,7 +9,7 @@ export default class Form extends Block {
     });
   }
 
-  render() {
+  override render() {
     return this.compile(template, this.props);
   }
 }
