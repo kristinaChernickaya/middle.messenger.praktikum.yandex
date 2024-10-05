@@ -1,9 +1,9 @@
 import { Block } from '../../services';
-import { TProps } from '../../types';
+import { TextareaType } from '../../types';
 import template from './template.hbs?raw';
 
 export default class Textarea extends Block {
-  constructor(props: TProps) {
+  constructor(props: TextareaType) {
     super(props);
   }
 

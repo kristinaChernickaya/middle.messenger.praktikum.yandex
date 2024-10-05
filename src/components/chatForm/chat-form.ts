@@ -1,10 +1,10 @@
 import * as Service from '../../services';
-import { TProps } from '../../types';
+import { ChatFormType } from '../../types';
 import * as Component from '..';
 import template from './template.hbs?raw';
 
 export default class ChatForm extends Service.Block {
-  constructor(props: TProps) {
+  constructor(props: ChatFormType) {
     const buttonSubmit = new Component.Button({
       className: 'arrowRight',
       type: 'submit',
@@ -18,7 +18,7 @@ export default class ChatForm extends Service.Block {
         'data-required': true,
       },
       events: {
-        blur: (event: FocusEvent) => {
+        blur: (event) => {
           Service.validate(event.target as HTMLInputElement);
         },
       },

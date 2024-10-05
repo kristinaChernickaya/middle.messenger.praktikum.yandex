@@ -1,9 +1,9 @@
 import { Block } from '../../services';
-import { TProps } from '../../types';
+import { InputType } from '../../types';
 import template from './template.hbs?raw';
 
 export default class Input extends Block {
-  constructor(props: TProps) {
+  constructor(props: InputType) {
     super(props);
   }
 

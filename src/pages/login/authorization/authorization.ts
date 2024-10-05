@@ -1,10 +1,10 @@
 import * as Component from '../../../components';
 import * as Service from '../../../services';
-import { TProps } from '../../../types';
+import { TBlockProps } from '../../../types';
 import template from '../template.hbs?raw';
 
 export default class Authorization extends Service.Block {
-  constructor(props: TProps) {
+  constructor(props: TBlockProps) {
     const fieldsProps = [
       {
         label: 'Логин',
@@ -36,7 +36,7 @@ export default class Authorization extends Service.Block {
             'data-valid-password': true,
           },
           events: {
-            blur: (event: FocusEvent) => {
+            blur: (event) => {
               Service.validate(event.target as HTMLInputElement);
             },
           },

@@ -1,9 +1,28 @@
 import EventBus from './event-bus';
 import Handlebars from 'handlebars';
 import { v4 as makeUUID } from 'uuid';
-import { TProps, TEvent, TAttr } from '../types';
+import { EventType, ObjectType } from '../types';
 
-export default abstract class Block {
+type PropsType = {
+  events?: EventType;
+  className?: string | string[] | Node[];
+  [key: string]: Block<PropsType> | Block<PropsType>[] | string | unknown;
+};
+
+type PropsChildrenType = {
+  [key: string]: Block<PropsType>;
+};
+
+type PropsListsType = {
+  [key: string]: Block<PropsType> | string[];
+};
+
+type PropsTypeOrEmptyObject = Partial<PropsType> & {};
+export default abstract class Block<
+  Props extends Partial<PropsType> = {},
+  Children extends Partial<PropsChildrenType> = {},
+  Lists extends Partial<PropsListsType> = {},
+> {
   static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
@@ -13,12 +32,12 @@ export default abstract class Block {
   _element: HTMLElement | null = null;
 
   id: string = '';
-  children: {};
-  lists: {};
-  props: TProps;
+  props: Props;
+  children: Children;
+  lists: Lists;
   eventBus: () => EventBus<unknown>;
 
-  constructor(propsAndChildren = {}) {
+  constructor(propsAndChildren: Props & Children & Lists) {
     const { children, props, lists } = this._getChildrenAndList(propsAndChildren);
     this.children = children;
     this.lists = lists;
@@ -26,7 +45,8 @@ export default abstract class Block {
     const eventBus = new EventBus();
 
     this.id = makeUUID();
-    this.props = this._makePropsProxy({ ...props, id: this.id });
+    //@ts-ignore
+    this.props = this._makePropsProxy({ ...props, id: this.id } as Props);
     this.eventBus = () => eventBus;
     this._registerEvents(eventBus);
     eventBus.emit(Block.EVENTS.INIT);
@@ -35,16 +55,15 @@ export default abstract class Block {
     eventBus.on(Block.EVENTS.INIT, this._init.bind(this));
     eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
     eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this));
-    //@ts-ignore
     eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
   }
 
-  _getChildrenAndList(propsAndChildren: TProps) {
-    const children: {} & Partial<TProps> = {};
-    const props: {} & Partial<TProps> = {};
-    const lists: {} & Partial<TProps> = {};
+  _getChildrenAndList(propsAndChildren: Props & Children & Lists) {
+    const children: {} & Partial<PropsChildrenType> = {};
+    const props: {} & Partial<PropsType> = {};
+    const lists: {} & Partial<PropsListsType> = {};
 
-    Object.entries(propsAndChildren).forEach(([key, value]) => {
+    Object.entries(propsAndChildren as PropsTypeOrEmptyObject).forEach(([key, value]) => {
       if (value instanceof Block) {
         children[key] = value;
       } else if (Array.isArray(value)) {
@@ -54,7 +73,11 @@ export default abstract class Block {
       }
     });
 
-    return { children, props, lists };
+    return {
+      children: children as Children,
+      props: props as PropsTypeOrEmptyObject,
+      lists: lists as Lists,
+    };
   }
 
   get element() {
@@ -115,17 +138,28 @@ export default abstract class Block {
     });
   }
 
-  private _componentDidUpdate(oldProps: TProps, newProps: TProps): void {
-    this.componentDidUpdate(oldProps, newProps);
-  }
+  // private _componentDidUpdate(oldProps: PropsType, newProps: PropsType): void {
+  //   this.componentDidUpdate(oldProps, newProps);
+  // }
 
-  public componentDidUpdate(oldProps: TProps, newProps: TProps): void {
-    if (oldProps !== newProps) {
-      this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
+  // public componentDidUpdate(oldProps: PropsType, newProps: PropsType): void {
+  //   if (oldProps !== newProps) {
+  //     this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
+  //   }
+  // }
+  _componentDidUpdate() {
+    const response = this.componentDidUpdate();
+    if (!response) {
+      return;
     }
+    this._render();
   }
 
-  public setProps = (nextProps: any) => {
+  componentDidUpdate() {
+    return true;
+  }
+
+  public setProps = (nextProps: Node) => {
     if (!nextProps) {
       return;
     }
@@ -134,8 +168,8 @@ export default abstract class Block {
     this.eventBus().emit(Block.EVENTS.FLOW_CDU);
   };
 
-  compile(template: string, props: TProps): DocumentFragment {
-    const propsAndStubs: TProps = { ...props };
+  compile(template: string, props: PropsType): DocumentFragment {
+    const propsAndStubs: PropsType = { ...props };
 
     Object.entries(this.children).forEach(([key, child]) => {
       const blockChild = child as Block;
@@ -143,8 +177,11 @@ export default abstract class Block {
     });
 
     Object.entries(this.lists).forEach(([key, list]) => {
-      const blockList = list as Block[];
-      propsAndStubs[key] = `<div data-id="${blockList.map((item) => item.id).join(',')}"></div>`;
+      const blockList = list;
+      if (Array.isArray(blockList)) {
+        //@ts-ignore
+        propsAndStubs[key] = `<div data-id="${blockList?.map((item) => item.id).join(',')}"></div>`;
+      }
     });
 
     const compiledTemplate = Handlebars.compile(template);
@@ -161,20 +198,24 @@ export default abstract class Block {
     });
 
     Object.entries(this.lists).forEach(([, list]) => {
-      const blockList = list as Block[];
+      const blockList = list;
       const listContent = this._createDocumentElement('template') as HTMLTemplateElement;
-      blockList.forEach((item) => {
-        if (item instanceof Block) {
-          listContent.content.append(item.getContent() as Node);
-        } else {
-          listContent.content.append(document.createTextNode(item));
+      if (Array.isArray(blockList)) {
+        blockList.forEach((item) => {
+          if ((item as unknown as Block<PropsType>) instanceof Block) {
+            listContent.content.append((item as unknown as Block<PropsType>).getContent() as Node);
+          } else {
+            listContent.content.append(document.createTextNode(item));
+          }
+        });
+
+        const stub = fragment.content.querySelector(
+          `[data-id="${blockList.map((item: unknown) => (item as unknown as Block<PropsType>).id!).join(',')}"]`,
+        );
+
+        if (stub) {
+          stub.replaceWith(listContent.content);
         }
-      });
-      const stub = fragment.content.querySelector(
-        `[data-id="${blockList.map((item) => item.id).join(',')}"]`,
-      );
-      if (stub) {
-        stub.replaceWith(listContent.content);
       }
     });
 
@@ -188,7 +229,7 @@ export default abstract class Block {
       this._element?.setAttribute('data-id', this.id);
     }
 
-    Object.entries(attr as TAttr).forEach(([key, value]) => {
+    Object.entries(attr as ObjectType).forEach(([key, value]) => {
       if (this._element) {
         this._element.setAttribute(key, value as string);
       }
@@ -198,15 +239,15 @@ export default abstract class Block {
   private _addEvents() {
     const { events = {} } = this.props;
 
-    Object.keys(events as TEvent).forEach((eventName) => {
-      this._element?.addEventListener(eventName, (events as TEvent)[eventName], true);
+    Object.keys(events as EventType).forEach((eventName) => {
+      this._element?.addEventListener(eventName, (events as EventType)[eventName], true);
     });
   }
 
   private _removeEvents() {
     const { events = {} } = this.props;
-    Object.keys(events as TEvent).forEach((eventName) => {
-      this._element?.removeEventListener(eventName, (events as TEvent)[eventName]);
+    Object.keys(events as EventType).forEach((eventName) => {
+      this._element?.removeEventListener(eventName, (events as EventType)[eventName]);
     });
   }
 
@@ -224,10 +265,10 @@ export default abstract class Block {
     }
   }
 
-  private _makePropsProxy(props: TProps = {}): TProps {
+  private _makePropsProxy(props: Props) {
     const self = this;
     const proxyProps = new Proxy(props, {
-      get(target: TProps, prop: string) {
+      get(target: Props, prop: string) {
         if (prop.startsWith('_')) {
           throw new Error('Нет прав');
         }
@@ -236,7 +277,7 @@ export default abstract class Block {
         return typeof value === 'function' ? value.bind(target) : value;
       },
 
-      set(target: TProps, prop: string, value: any) {
+      set(target: PropsTypeOrEmptyObject, prop: string, value) {
         if (prop.startsWith('_') || !value) {
           throw new Error('Нет прав');
         }
