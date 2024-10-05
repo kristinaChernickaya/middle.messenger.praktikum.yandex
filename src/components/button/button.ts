@@ -1,9 +1,9 @@
 import { Block } from '../../services';
-import { TProps } from '../../types';
+import { TButton } from '../../types';
 import template from './template.hbs?raw';
 
-export default class Button extends Block {
-  constructor(props: TProps) {
+export default class Button extends Block<TButton> {
+  constructor(props: TButton) {
     super(props);
   }
 

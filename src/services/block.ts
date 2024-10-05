@@ -18,15 +18,15 @@ export default abstract class Block {
   props: TProps;
   eventBus: () => EventBus<unknown>;
 
-  constructor(propsChildrenLists = {}) {
-    console.log(propsChildrenLists);
-    const { children, props, lists } = this._getChildrenAndList(propsChildrenLists);
+  constructor(propsAndChildren = {}) {
+    const { children, props, lists } = this._getChildrenAndList(propsAndChildren);
     this.children = children;
     this.lists = lists;
-    this.id = makeUUID();
-    this.props = this._makePropsProxy({ ...props, id: this.id });
 
     const eventBus = new EventBus();
+
+    this.id = makeUUID();
+    this.props = this._makePropsProxy({ ...props, id: this.id });
     this.eventBus = () => eventBus;
     this._registerEvents(eventBus);
     eventBus.emit(Block.EVENTS.INIT);

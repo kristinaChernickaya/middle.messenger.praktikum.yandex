@@ -1,3 +1,14 @@
+/* service HTTPTransport */
+export type HTTPMethodType = (url: string, options?: any) => Promise<unknown>;
+export type HTTPCurrentMethodType = 'GET' | 'POST' | 'PUT' | 'DELETE';
+export type RequestOptions = {
+  method?: HTTPCurrentMethodType;
+  data?: any;
+  headers?: { [key: string]: string };
+  timeout?: number;
+};
+
+/* general */
 export type EventType = {
   [key: string]: (event: Event) => void;
 };
@@ -22,3 +33,10 @@ export type TEvent = {
 export type TObjectKeys = {
   <T, K extends keyof T>(obj: T, key: K): T[K];
 };
+
+export type TButton = {
+  text: string;
+  type: string;
+  className?: string;
+};
+// export type TProps<T> = Record<string, T>;
