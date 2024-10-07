@@ -1,10 +1,10 @@
 import * as Service from '../../services';
-import { ChatFormType } from '../../types';
+import { ChatFormPropsType } from '../../types';
 import * as Component from '..';
 import template from './template.hbs?raw';
 
 export default class ChatForm extends Service.Block {
-  constructor(props: ChatFormType) {
+  constructor(props: ChatFormPropsType) {
     const buttonSubmit = new Component.Button({
       className: 'arrowRight',
       type: 'submit',

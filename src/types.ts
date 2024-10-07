@@ -39,18 +39,19 @@ export type TObjectKeys = {
 export type PropsAttrType = Record<string, string | boolean | number | Function | unknown>;
 
 /* components */
-export type ButtonType = {
+export type ButtonType = AttrEventsType & {
   text?: string;
-  type: string;
+  type?: string;
   className?: string;
   withInternalId?: boolean;
 };
+
 export type InputType = AttrEventsType & {
   text?: string;
   type: string;
   name: string;
   className?: string;
-  placeholderText?: boolean;
+  placeholderText?: string;
 };
 
 export type InputBlockType = {
@@ -58,7 +59,7 @@ export type InputBlockType = {
   label: string;
 };
 
-export type LinkType = {
+export type LinkType = AttrEventsType & {
   href: string;
   className?: string;
   text?: string;
@@ -78,8 +79,13 @@ export type TextareaType = AttrEventsType & {
 };
 
 export type ChatFormType = {
-  textarea: Node;
-  sentButton: Node;
+  textarea: ObjectType;
+  sentButton: ObjectType;
+};
+export type ChatLeftSideBarType = {
+  linkProfile: ObjectType;
+  searchInput: ObjectType;
+  chatsBlock: ObjectType[];
 };
 
 export type TProps = Record<string, string | Function | unknown>;

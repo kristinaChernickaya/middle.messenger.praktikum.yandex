@@ -319,11 +319,11 @@
 
 .block-left-bar_top {
   border-bottom: 1px solid var(--grey);
-  padding: 0px 0px 10px;
+  padding: 0px 10px 10px;
 }
 
 .block-left-bar {
-  padding: 0px 10px;
+  padding: 0px;
   width: 260px;
   display: flex;
   flex-flow: column wrap;
@@ -348,7 +348,6 @@
   }
   &:focus {
     outline: 1px solid #c4c4c4;
-    //outline-color: red;
   }
 }
 
@@ -367,6 +366,15 @@
 .chat-block {
   display: flex;
   justify-content: space-between;
+  //padding: 0px 10px;
+  padding: 10px;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.chat-block.active {
+  background: var(--blueLight);
 }
 
 .chat-block_left {

@@ -1,27 +1,42 @@
-import { TProps } from '../../types';
+import { ChatLeftSideBarType } from '../../types';
 import * as Component from '../../components';
 import template from './template.hbs?raw';
-import { Block } from '../../services';
+import { Block, addActiveClass } from '../../services';
 
 export default class ChatLeftSideBar extends Block {
-  constructor(props: TProps) {
+  constructor(props: ChatLeftSideBarType) {
     const chatsBlockProps = [
       {
         userName: 'Alex',
         userMessage: 'Привет!',
         date: '10:49',
         countMessage: '2',
+        events: {
+          click: (event: Event) => {
+            addActiveClass(event);
+          },
+        },
       },
       {
         userName: 'Алёна',
         userMessage: 'Ну где ты? Жду тебя',
         date: '04:22',
+        events: {
+          click: (event: Event) => {
+            addActiveClass(event);
+          },
+        },
       },
       {
         userName: 'Павел',
         userMessage: 'Как дела?',
         date: '12:41',
         countMessage: '3',
+        events: {
+          click: (event: Event) => {
+            addActiveClass(event);
+          },
+        },
       },
     ];
 
@@ -45,8 +60,8 @@ export default class ChatLeftSideBar extends Block {
       placeholderText: 'Поиск',
       type: 'text',
       name: 'search',
-      id: 'search',
     });
+    console.log(linkProfile);
     super({
       ...props,
       linkProfile: linkProfile,

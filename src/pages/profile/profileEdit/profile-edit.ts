@@ -18,7 +18,7 @@ export default class ProfileEdit extends Service.Block {
             'data-valid-email': true,
           },
           events: {
-            blur: (event: FocusEvent) => {
+            blur: (event) => {
               Service.validate(event.target as HTMLInputElement);
             },
           },
@@ -122,6 +122,7 @@ export default class ProfileEdit extends Service.Block {
       withInternalId: true,
       type: 'submit',
     });
+
     const backButton = new Component.Button({
       className: 'arrowLeft',
       events: {
