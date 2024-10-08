@@ -1,3 +1,4 @@
+import { getDataForm } from '../../../utils';
 import * as Component from '../../../components';
 import * as Service from '../../../services';
 import { TProps } from '../../../types';
@@ -16,7 +17,7 @@ export default class ChatCurrent extends Service.Block {
         submit: (event: Event) => {
           Service.validateForm(event);
           if (Service.validateForm(event)) {
-            Service.getDataForm(event);
+            getDataForm(event);
           }
         },
       },

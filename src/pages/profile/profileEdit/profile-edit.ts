@@ -2,6 +2,7 @@ import * as Component from '../../../components';
 import * as Service from '../../../services';
 import { TProps } from '../../../types';
 import template from '../template.hbs?raw';
+import { getDataForm } from '../../../utils';
 
 export default class ProfileEdit extends Service.Block {
   constructor(props: TProps) {
@@ -139,7 +140,7 @@ export default class ProfileEdit extends Service.Block {
         submit: (event: Event) => {
           Service.validateForm(event);
           if (Service.validateForm(event)) {
-            Service.getDataForm(event);
+            getDataForm(event);
           }
         },
       },

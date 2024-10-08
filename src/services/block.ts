@@ -1,4 +1,4 @@
-import EventBus from './event-bus';
+import EventBus from './eventBus';
 import Handlebars from 'handlebars';
 import { v4 as makeUUID } from 'uuid';
 import { EventType, ObjectType } from '../types';

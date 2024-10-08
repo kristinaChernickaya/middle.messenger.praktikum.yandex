@@ -1,3 +1,4 @@
+import { getDataForm } from '../../../utils';
 import * as Component from '../../../components';
 import * as Service from '../../../services';
 import { TBlockProps } from '../../../types';
@@ -51,6 +52,12 @@ export default class Authorization extends Service.Block {
       text: 'Авторизация',
       type: 'submit',
       withInternalId: true,
+      events: {
+        click: () => {
+          console.log('sss');
+          history.back();
+        },
+      },
     });
 
     const link = new Component.Link({
@@ -71,7 +78,7 @@ export default class Authorization extends Service.Block {
         submit: (event: Event) => {
           Service.validateForm(event);
           if (Service.validateForm(event)) {
-            Service.getDataForm(event);
+            getDataForm(event);
           }
         },
       },

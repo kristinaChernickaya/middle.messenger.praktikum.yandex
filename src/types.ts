@@ -54,11 +54,6 @@ export type InputType = AttrEventsType & {
   placeholderText?: string;
 };
 
-export type InputBlockType = {
-  input: string;
-  label: string;
-};
-
 export type LinkType = AttrEventsType & {
   href: string;
   className?: string;
@@ -78,10 +73,11 @@ export type TextareaType = AttrEventsType & {
   placeholderText?: string;
 };
 
-export type ChatFormType = {
+export type ChatFormType = AttrEventsType & {
   textarea: ObjectType;
   sentButton: ObjectType;
 };
+
 export type ChatLeftSideBarType = {
   linkProfile: ObjectType;
   searchInput: ObjectType;

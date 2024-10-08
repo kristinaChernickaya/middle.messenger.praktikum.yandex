@@ -1,7 +1,8 @@
 import { ChatLeftSideBarType } from '../../types';
 import * as Component from '../../components';
 import template from './template.hbs?raw';
-import { Block, addActiveClass } from '../../services';
+import { Block } from '../../services';
+import { addActiveClass } from '../../utils';
 
 export default class ChatLeftSideBar extends Block {
   constructor(props: ChatLeftSideBarType) {
