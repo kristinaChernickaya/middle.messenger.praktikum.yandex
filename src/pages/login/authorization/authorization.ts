@@ -3,6 +3,7 @@ import * as Component from '../../../components';
 import * as Service from '../../../services';
 import { TProps } from '../../../types';
 import template from '../template.hbs?raw';
+import { router, routes } from '../../../router';
 
 export default class Authorization extends Service.Block {
   constructor(props?: TProps) {
@@ -55,17 +56,16 @@ export default class Authorization extends Service.Block {
       events: {
         click: () => {
           console.log('sss');
-          history.back();
         },
       },
     });
 
     const link = new Component.Link({
       text: 'Нет аккаунта?',
-      href: '/',
+      href: '/sign-up',
       events: {
         click: () => {
-          console.log('link event');
+          router.go(routes.signUp);
         },
       },
     });

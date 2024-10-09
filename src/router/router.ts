@@ -43,7 +43,7 @@ export class Route {
   }
 }
 
-export class Router {
+class Router {
   static __instance: Router;
   private _currentRoute!: Route | null;
   private _rootQuery!: string;
@@ -109,3 +109,5 @@ export class Router {
     return this.routes.find((route) => route.match(pathname));
   }
 }
+
+export const router = new Router('#app');
