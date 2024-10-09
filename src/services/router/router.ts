@@ -1,7 +1,7 @@
-import { RouteProps } from '../types';
-import { Block } from '../services';
-import { render, getEqual } from '../utils';
-import { PropsType } from '../services/block';
+import { RouteProps } from '../../types';
+import { render, getEqual } from '../../utils';
+import Block, { PropsType } from '../block';
+
 export class Route {
   private _pathname: string;
   private _blockClass: new (props?: PropsType) => Block;

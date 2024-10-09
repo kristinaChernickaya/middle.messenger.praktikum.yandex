@@ -1,10 +1,8 @@
 import './styles/style.pcss';
 import * as Page from './pages';
-import { router, routes } from './router';
+import { router, routes } from './services';
 
 window.addEventListener('DOMContentLoaded', async () => {
-  //const router = new Router('#app');
-
   router
     .use(routes.auth, Page.Authorization)
     .use(routes.signUp, Page.Registration)
