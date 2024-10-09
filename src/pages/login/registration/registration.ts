@@ -5,7 +5,7 @@ import template from '../template.hbs?raw';
 import { getDataForm } from '../../../utils';
 
 export default class Registration extends Service.Block {
-  constructor(props: TProps) {
+  constructor(props?: TProps) {
     const fieldsProps = [
       {
         label: 'Почта',
@@ -17,7 +17,7 @@ export default class Registration extends Service.Block {
             'data-valid-email': true,
           },
           events: {
-            blur: (event: FocusEvent) => {
+            blur: (event) => {
               Service.validate(event.target as HTMLInputElement);
             },
           },
@@ -103,7 +103,7 @@ export default class Registration extends Service.Block {
             'data-valid-password': true,
           },
           events: {
-            blur: (event: FocusEvent) => {
+            blur: (event) => {
               Service.validate(event.target as HTMLInputElement);
             },
           },
@@ -121,7 +121,7 @@ export default class Registration extends Service.Block {
             'data-valid-password': true,
           },
           events: {
-            blur: (event: FocusEvent) => {
+            blur: (event) => {
               Service.validate(event.target as HTMLInputElement);
             },
           },

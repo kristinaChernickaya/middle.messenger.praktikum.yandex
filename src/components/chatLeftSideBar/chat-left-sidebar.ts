@@ -5,7 +5,7 @@ import { Block } from '../../services';
 import { addActiveClass } from '../../utils';
 
 export default class ChatLeftSideBar extends Block {
-  constructor(props: ChatLeftSideBarType) {
+  constructor(props?: ChatLeftSideBarType) {
     const chatsBlockProps = [
       {
         userName: 'Alex',

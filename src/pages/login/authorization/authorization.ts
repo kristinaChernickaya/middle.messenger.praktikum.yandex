@@ -1,11 +1,11 @@
 import { getDataForm } from '../../../utils';
 import * as Component from '../../../components';
 import * as Service from '../../../services';
-import { TBlockProps } from '../../../types';
+import { TProps } from '../../../types';
 import template from '../template.hbs?raw';
 
 export default class Authorization extends Service.Block {
-  constructor(props: TBlockProps) {
+  constructor(props?: TProps) {
     const fieldsProps = [
       {
         label: 'Логин',

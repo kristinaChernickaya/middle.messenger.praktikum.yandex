@@ -3,7 +3,7 @@ import Handlebars from 'handlebars';
 import { v4 as makeUUID } from 'uuid';
 import { EventType, ObjectType } from '../types';
 
-type PropsType = {
+export type PropsType = {
   events?: EventType;
   className?: string | string[] | Node[];
   [key: string]: Block<PropsType> | Block<PropsType>[] | string | unknown;
@@ -37,8 +37,8 @@ export default abstract class Block<
   lists: Lists;
   eventBus: () => EventBus<unknown>;
 
-  constructor(propsAndChildren: Props & Children & Lists) {
-    const { children, props, lists } = this._getChildrenAndList(propsAndChildren);
+  constructor(propsAndChildren?: Props & Children & Lists) {
+    const { children, props, lists } = this._getChildrenAndList(propsAndChildren!);
     this.children = children;
     this.lists = lists;
 

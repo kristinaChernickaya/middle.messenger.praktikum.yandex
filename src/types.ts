@@ -1,3 +1,5 @@
+import Block, { PropsType } from './services/block';
+
 /* service HTTPTransport */
 export type HTTPMethodType = (url: string, options?: any) => Promise<unknown>;
 export type HTTPCurrentMethodType = 'GET' | 'POST' | 'PUT' | 'DELETE';
@@ -6,6 +8,11 @@ export type RequestOptionsType = {
   data?: Document | XMLHttpRequestBodyInit | null | undefined;
   headers?: { [key: string]: string };
   timeout?: number;
+};
+
+/* router */
+export type RouteProps = {
+  rootQuery: string;
 };
 
 /* general */
@@ -30,6 +37,7 @@ export type TBlockProps = AttrEventsType & {
   className?: string;
   withInternalId?: boolean;
   currentPage?: string;
+  [key: string]: Block<PropsType> | Block<PropsType>[] | string | unknown;
 };
 
 export type TObjectKeys = {

@@ -4,7 +4,7 @@ import { TProps } from '../../../types';
 import template from '../template.hbs?raw';
 
 export default class ProfileInfo extends Service.Block {
-  constructor(props: TProps) {
+  constructor(props?: TProps) {
     const linksProps = [
       {
         link: new Component.Link({

@@ -4,8 +4,8 @@ import { TProps } from '../../../types';
 import template from '../template.hbs?raw';
 
 export default class ChatPreview extends Service.Block {
-  constructor(props: TProps) {
-    const chatLeftSideBar = new Component.ChatLeftSideBar({});
+  constructor(props?: TProps) {
+    const chatLeftSideBar = new Component.ChatLeftSideBar();
 
     super({
       ...props,

@@ -1,14 +1,21 @@
+import { RouteProps } from '../types';
+import { Block } from '../services';
 import { render, getEqual } from '../utils';
-
+import { PropsType } from '../services/block';
 export class Route {
-  constructor(pathname, view, props) {
+  private _pathname: string;
+  private _blockClass: new (props?: PropsType) => Block;
+  private _block: Block | null;
+  private _props: RouteProps;
+
+  constructor(pathname: string, view: new (props?: PropsType) => Block, props: RouteProps) {
     this._pathname = pathname;
     this._blockClass = view;
     this._block = null;
     this._props = props;
   }
 
-  navigate(pathname) {
+  navigate(pathname: string) {
     if (this.match(pathname)) {
       this._pathname = pathname;
       this.render();
@@ -21,11 +28,10 @@ export class Route {
     }
   }
 
-  match(pathname) {
+  match(pathname: string): boolean {
     return getEqual(pathname, this._pathname);
   }
 
-  //создать блок, если тот ещё не был создан
   render() {
     if (!this._block) {
       this._block = new this._blockClass();
@@ -38,7 +44,13 @@ export class Route {
 }
 
 export class Router {
-  constructor(rootQuery) {
+  static __instance: Router;
+  private _currentRoute!: Route | null;
+  private _rootQuery!: string;
+  routes!: Route[];
+  history!: History;
+
+  constructor(rootQuery: string) {
     if (Router.__instance) {
       return Router.__instance;
     }
@@ -51,24 +63,23 @@ export class Router {
     Router.__instance = this;
   }
 
-  use(pathname, block) {
+  use(pathname: string, block: new (props?: PropsType) => Block): this {
     const route = new Route(pathname, block, { rootQuery: this._rootQuery });
     this.routes.push(route);
-
     return this;
   }
 
   start() {
-    // Реагируем на изменения в адресной строке и вызываем перерисовку
-    window.onpopstate = ((event) => {
-      this._onRoute(event.currentTarget.location.pathname);
+    window.onpopstate = ((event: PopStateEvent) => {
+      this._onRoute((event.currentTarget as Window).location.pathname);
     }).bind(this);
 
     this._onRoute(window.location.pathname);
   }
 
-  _onRoute(pathname) {
+  private _onRoute(pathname: string) {
     const route = this.getRoute(pathname);
+
     if (!route) {
       return;
     }
@@ -78,10 +89,10 @@ export class Router {
     }
 
     this._currentRoute = route;
-    route.render(route, pathname);
+    route.render();
   }
 
-  go(pathname) {
+  go(pathname: string) {
     this.history.pushState({}, '', pathname);
     this._onRoute(pathname);
   }
@@ -94,7 +105,7 @@ export class Router {
     this.history.forward();
   }
 
-  getRoute(pathname) {
+  getRoute(pathname: string): Route | undefined {
     return this.routes.find((route) => route.match(pathname));
   }
 }
