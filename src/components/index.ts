@@ -16,3 +16,4 @@ export { ChatterBlock } from './chatterBlock';
 export { ChatForm } from './chatForm';
 export { Form } from './form';
 export { ProfileForm } from './profileForm';
+export { ErrorMessage } from './errorMessage';

@@ -1,11 +1,12 @@
 import { getDataForm } from '../../../utils';
 import * as Component from '../../../components';
 import * as Service from '../../../services';
-import { TProps } from '../../../types';
+import { TProps, UserLoginType } from '../../../types';
 import template from '../template.hbs?raw';
+import { authController } from '../../../controllers';
 
 export default class Authorization extends Service.Block {
-  constructor(props?: TProps) {
+  constructor(props?: TProps, children) {
     const fieldsProps = [
       {
         label: 'Логин',
@@ -52,11 +53,6 @@ export default class Authorization extends Service.Block {
       text: 'Авторизация',
       type: 'submit',
       withInternalId: true,
-      events: {
-        click: () => {
-          console.log('sss');
-        },
-      },
     });
 
     const link = new Component.Link({
@@ -75,23 +71,28 @@ export default class Authorization extends Service.Block {
       link,
       events: {
         submit: (event: Event) => {
-          Service.validateForm(event);
-          if (Service.validateForm(event)) {
-            getDataForm(event);
-          }
+          event.preventDefault();
+          // Service.validateForm(event);
+          //if (Service.validateForm(event)) {
+          const data = getDataForm(event);
+          authController.login(data as UserLoginType);
+          // }
         },
       },
     });
 
     super({
-      ...props,
       title: 'Авторизация',
       form,
+      error: props.user.errorMessage,
       blockLinks: new Component.BlockLinks({}),
     });
+
+    console.log('текущий state:', props);
   }
 
   override render() {
+    //console.log('auth props: ', this.props);
     return this.compile(template, { ...this.props });
   }
 }

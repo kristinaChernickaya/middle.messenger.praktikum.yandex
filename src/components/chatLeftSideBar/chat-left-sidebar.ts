@@ -49,11 +49,7 @@ export default class ChatLeftSideBar extends Block {
       text: 'Профиль >',
       href: '/',
       className: 'text-grey-color',
-      events: {
-        click: () => {
-          console.log('event Профиль');
-        },
-      },
+      events: {},
     });
 
     const searchInput = new Component.Input({
@@ -62,7 +58,6 @@ export default class ChatLeftSideBar extends Block {
       type: 'text',
       name: 'search',
     });
-    console.log(linkProfile);
     super({
       ...props,
       linkProfile: linkProfile,

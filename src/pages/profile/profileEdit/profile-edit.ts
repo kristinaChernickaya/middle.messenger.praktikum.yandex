@@ -5,13 +5,13 @@ import template from '../template.hbs?raw';
 import { getDataForm } from '../../../utils';
 
 export default class ProfileEdit extends Service.Block {
-  constructor(props: TProps) {
+  constructor(props?: TProps) {
     const fieldsProps = [
       {
         label: 'Почта',
         input: new Component.Input({
           type: 'text',
-          placeholderText: 'pochta@yandex.ru',
+          placeholderText: props.user.email,
           name: 'email',
           className: 'text-profile-block_input',
           attr: {
@@ -29,7 +29,7 @@ export default class ProfileEdit extends Service.Block {
         label: 'Логин',
         input: new Component.Input({
           type: 'text',
-          placeholderText: 'JohnJonson',
+          placeholderText: props.user.login,
           name: 'login',
           className: 'text-profile-block_input',
           attr: {
@@ -49,7 +49,7 @@ export default class ProfileEdit extends Service.Block {
         label: 'Имя',
         input: new Component.Input({
           type: 'text',
-          placeholderText: 'John',
+          placeholderText: props.user.first_name,
           name: 'first_name',
           className: 'text-profile-block_input',
           attr: {
@@ -67,7 +67,7 @@ export default class ProfileEdit extends Service.Block {
         label: 'Фамилия',
         input: new Component.Input({
           type: 'text',
-          placeholderText: 'Doe',
+          placeholderText: props.user.second_name,
           name: 'second_name',
           className: 'text-profile-block_input',
           attr: {
@@ -85,7 +85,7 @@ export default class ProfileEdit extends Service.Block {
         label: 'Имя в чате',
         input: new Component.Input({
           type: 'text',
-          placeholderText: 'John',
+          placeholderText: props.user.display_name,
           name: 'display_name',
           className: 'text-profile-block_input',
         }),
@@ -94,7 +94,7 @@ export default class ProfileEdit extends Service.Block {
         label: 'Телефон',
         input: new Component.Input({
           type: 'text',
-          placeholderText: '+7 (909) 967 30 30',
+          placeholderText: props.user.phone,
           name: 'phone',
           className: 'text-profile-block_input',
           attr: {
@@ -127,9 +127,7 @@ export default class ProfileEdit extends Service.Block {
     const backButton = new Component.Button({
       className: 'arrowLeft',
       events: {
-        click: () => {
-          console.log('back event');
-        },
+        click: () => {},
       },
     });
 

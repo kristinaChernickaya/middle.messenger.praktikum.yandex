@@ -7,7 +7,7 @@ export type RequestOptionsType = {
   method?: HTTPCurrentMethodType;
   data?: Document | XMLHttpRequestBodyInit | null | undefined;
   headers?: { [key: string]: string };
-  timeout?: number;
+  isCredentials?: boolean;
 };
 
 /* router */
@@ -15,7 +15,30 @@ export type RouteProps = {
   rootQuery: string;
 };
 
+/* store */
+export type UserType = {
+  first_name: string;
+  second_name: string;
+  login: string;
+  email: string;
+  password: string;
+  phone: string;
+};
+
+export type UserLoginType = {
+  login: string;
+  password: string;
+};
+export type StoreType = {
+  errorMessage: '';
+  user: UserType | {};
+};
+
 /* general */
+export type Indexed<T = unknown> = {
+  [key in string]: T;
+};
+
 export type EventType = {
   [key: string]: (event: Event) => void;
 };

@@ -9,9 +9,7 @@ export default class ErrorClient extends Service.Block {
       text: 'Назад к чатам',
       href: '/',
       events: {
-        click: () => {
-          console.log('event Назад к чатам');
-        },
+        click: () => {},
       },
     });
 

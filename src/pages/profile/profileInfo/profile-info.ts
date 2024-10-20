@@ -1,3 +1,4 @@
+import { authController } from '../../../controllers';
 import * as Component from '../../../components';
 import * as Service from '../../../services';
 import { TProps } from '../../../types';
@@ -11,9 +12,7 @@ export default class ProfileInfo extends Service.Block {
           text: 'Изменить данные',
           href: '/',
           events: {
-            click: () => {
-              console.log('event Изменить данные');
-            },
+            click: () => {},
           },
         }),
       },
@@ -22,9 +21,7 @@ export default class ProfileInfo extends Service.Block {
           text: 'Изменить пароль',
           href: '/',
           events: {
-            click: () => {
-              console.log('event Изменить пароль');
-            },
+            click: () => {},
           },
         }),
       },
@@ -34,48 +31,30 @@ export default class ProfileInfo extends Service.Block {
           href: '/',
           className: 'text-red-color',
           events: {
-            click: () => {
-              console.log('event Выйти');
-            },
+            click: () => {},
           },
         }),
       },
     ];
 
-    const userInfoProps = [
-      {
-        label: 'Изменить данные',
-        text: 'pochta@yandex.ru',
-      },
-      {
-        label: 'Логин',
-        text: 'ivanivanov',
-      },
-      {
-        label: 'Имя',
-        text: 'John',
-      },
-      {
-        label: 'Фамилия',
-        text: 'Doe',
-      },
-      {
-        label: 'Имя в чате',
-        text: 'John',
-      },
-
-      {
-        label: 'Телефон',
-        text: '+7 (909) 967 30 30',
-      },
+    const userData = [
+      { label: 'Почта', text: 'email' },
+      { label: 'Логин', text: 'login' },
+      { label: 'Имя', text: 'first_name' },
+      { label: 'Фамилия', text: 'second_name' },
+      { label: 'Имя в чате', text: 'display_name' },
+      { label: 'Телефон', text: 'phone' },
     ];
+
+    const userInfo = userData.map((field) => {
+      return new Component.TextProfile({
+        label: field.label,
+        text: props?.user[field.text],
+      });
+    });
 
     const links = linksProps.map((link) => {
       return new Component.LinkBorderBottom(link);
-    });
-
-    const userInfo = userInfoProps.map((user) => {
-      return new Component.TextProfile(user);
     });
 
     let avatar = new Component.Avatar({});
@@ -83,9 +62,7 @@ export default class ProfileInfo extends Service.Block {
     const backButton = new Component.Button({
       className: 'arrowLeft',
       events: {
-        click: () => {
-          console.log('back event');
-        },
+        click: () => {},
       },
     });
 
@@ -100,6 +77,7 @@ export default class ProfileInfo extends Service.Block {
   }
 
   override render() {
+    console.log('profile: ', this.props);
     return this.compile(template, { ...this.props });
   }
 }

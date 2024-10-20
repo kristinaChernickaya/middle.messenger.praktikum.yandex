@@ -89,6 +89,10 @@ export default abstract class Block<
     this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
   }
 
+  init(): void | null {
+    return null;
+  }
+
   private _createResources() {
     this._element = this._createDocumentElement('div');
   }
@@ -138,26 +142,26 @@ export default abstract class Block<
     });
   }
 
-  // private _componentDidUpdate(oldProps: PropsType, newProps: PropsType): void {
-  //   this.componentDidUpdate(oldProps, newProps);
-  // }
+  private _componentDidUpdate(oldProps: PropsType, newProps: PropsType): void {
+    this.componentDidUpdate(oldProps, newProps);
+  }
 
-  // public componentDidUpdate(oldProps: PropsType, newProps: PropsType): void {
-  //   if (oldProps !== newProps) {
-  //     this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
-  //   }
-  // }
-  _componentDidUpdate() {
-    const response = this.componentDidUpdate();
-    if (!response) {
-      return;
+  public componentDidUpdate(oldProps: PropsType, newProps: PropsType): void {
+    if (oldProps !== newProps) {
+      this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
     }
-    this._render();
   }
+  // _componentDidUpdate() {
+  //   const response = this.componentDidUpdate();
+  //   if (!response) {
+  //     return;
+  //   }
+  //   this._render();
+  // }
 
-  componentDidUpdate() {
-    return true;
-  }
+  // componentDidUpdate() {
+  //   return true;
+  // }
 
   public setProps = (nextProps: Node) => {
     if (!nextProps) {
@@ -165,6 +169,7 @@ export default abstract class Block<
     }
 
     Object.assign(this.props, nextProps);
+    console.log('this.props: ', this.props, 'nextProps (новый state):', nextProps);
     this.eventBus().emit(Block.EVENTS.FLOW_CDU);
   };
 
@@ -254,14 +259,14 @@ export default abstract class Block<
   public show(): void {
     const content = this.getContent();
     if (content) {
-      content.style.display = 'block';
+      document.getElementById('app')!.appendChild(content);
     }
   }
 
   public hide(): void {
     const content = this.getContent();
     if (content) {
-      content.style.display = 'none';
+      content.remove();
     }
   }
 
@@ -269,18 +274,18 @@ export default abstract class Block<
     const self = this;
     const proxyProps = new Proxy(props, {
       get(target: Props, prop: string) {
-        if (prop.startsWith('_')) {
-          throw new Error('Нет прав');
-        }
+        // if (prop.startsWith('_')) {
+        //   throw new Error('Нет прав');
+        // }
 
         const value = target[prop];
         return typeof value === 'function' ? value.bind(target) : value;
       },
 
       set(target: PropsTypeOrEmptyObject, prop: string, value) {
-        if (prop.startsWith('_') || !value) {
-          throw new Error('Нет прав');
-        }
+        // if (prop.startsWith('_') || !value) {
+        //   throw new Error('Нет прав');
+        // }
         const oldProps = { ...target };
         target[prop] = value;
         self.eventBus().emit(Block.EVENTS.FLOW_CDU, oldProps, target);
