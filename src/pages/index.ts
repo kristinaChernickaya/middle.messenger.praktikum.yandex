@@ -1,5 +1,5 @@
-export { Authorization } from './login';
-export { Registration } from './login';
+export { Login } from './auth';
+export { Signup } from './auth';
 export { ProfileInfo } from './profile';
 export { ProfileEdit } from './profile';
 export { ProfileEditPassword } from './profile';

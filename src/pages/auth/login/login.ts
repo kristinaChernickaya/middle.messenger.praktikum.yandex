@@ -5,8 +5,8 @@ import { TProps, UserLoginType } from '../../../types';
 import template from '../template.hbs?raw';
 import { authController } from '../../../controllers';
 
-export default class Authorization extends Service.Block {
-  constructor(props?: TProps, children) {
+export default class Login extends Service.Block {
+  constructor(props?: TProps) {
     const fieldsProps = [
       {
         label: 'Логин',
@@ -72,11 +72,11 @@ export default class Authorization extends Service.Block {
       events: {
         submit: (event: Event) => {
           event.preventDefault();
-          // Service.validateForm(event);
-          //if (Service.validateForm(event)) {
-          const data = getDataForm(event);
-          authController.login(data as UserLoginType);
-          // }
+          Service.validateForm(event);
+          if (Service.validateForm(event)) {
+            const data = getDataForm(event);
+            authController.login(data as UserLoginType);
+          }
         },
       },
     });
@@ -84,15 +84,13 @@ export default class Authorization extends Service.Block {
     super({
       title: 'Авторизация',
       form,
-      error: props.user.errorMessage,
+      errorMessage: props.errorMessage,
       blockLinks: new Component.BlockLinks({}),
     });
-
-    console.log('текущий state:', props);
   }
 
   override render() {
-    //console.log('auth props: ', this.props);
+    // console.log('auth props: ', this.props);
     return this.compile(template, { ...this.props });
   }
 }

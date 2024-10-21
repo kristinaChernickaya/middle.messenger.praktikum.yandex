@@ -5,7 +5,7 @@ import template from '../template.hbs?raw';
 import { getDataForm } from '../../../utils';
 import { authController } from '../../../controllers';
 
-export default class Registration extends Service.Block {
+export default class Signup extends Service.Block {
   constructor(props?: TProps) {
     const fieldsProps = [
       {
