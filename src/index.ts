@@ -2,7 +2,6 @@ import './styles/style.pcss';
 import * as Page from './pages';
 import { connect, router, routes } from './services';
 import { authController } from './controllers';
-import { merge } from './utils';
 
 window.addEventListener('DOMContentLoaded', async () => {
   let isAuth = await authController.getUserAuth().then((isResponse) => isResponse);
@@ -25,25 +24,25 @@ window.addEventListener('DOMContentLoaded', async () => {
 
   let pathWindow = window.location.pathname;
 
-  // if (isAuth) {
-  //   if (pathWindow === '/' || pathWindow === '/sign-up') {
-  //     router.go(routes.settings);
-  //   }
-  // }
-  // if (!isAuth) {
-  //   if (
-  //     pathWindow === '/settings' ||
-  //     pathWindow === '/settings/edit' ||
-  //     pathWindow === '/settings/edit-password' ||
-  //     pathWindow === '/messenger'
-  //   ) {
-  //     router.go(routes.login);
-  //   }
-  // }
+  if (isAuth) {
+    if (pathWindow === '/' || pathWindow === '/sign-up') {
+      router.go(routes.settings);
+    }
+  }
+  if (!isAuth) {
+    if (
+      pathWindow === '/messenger' ||
+      pathWindow === '/settings' ||
+      pathWindow === '/settings/edit' ||
+      pathWindow === '/settings/edit-password'
+    ) {
+      router.go(routes.login);
+    }
+  }
 
-  // if (!Object.values(routes).includes(pathWindow)) {
-  //   router.go(routes.notFoundPage);
-  // }
+  if (!Object.values(routes).includes(pathWindow)) {
+    router.go(routes.notFoundPage);
+  }
 
   router.start();
 });

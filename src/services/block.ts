@@ -3,7 +3,6 @@ import Handlebars from 'handlebars';
 import { v4 as makeUUID } from 'uuid';
 import { EventType, ObjectType } from '../types';
 import { isEqual } from '../utils';
-import { store } from '../store';
 
 export type PropsType = {
   events?: EventType;
@@ -56,6 +55,7 @@ export default abstract class Block<
     eventBus.on(Block.EVENTS.INIT, this._init.bind(this));
     eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
     eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this));
+    //@ts-ignore
     eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
   }
 
@@ -87,7 +87,7 @@ export default abstract class Block<
 
   public _init() {
     this.init();
-    // console.log('init block');
+
     this._createResources();
     this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
   }
@@ -127,6 +127,8 @@ export default abstract class Block<
   public componentDidMount() {}
 
   public getContent() {
+    this.dispatchComponentDidMount();
+
     return this.element;
   }
 
@@ -143,31 +145,20 @@ export default abstract class Block<
     });
   }
 
-  // private _componentDidUpdate(oldProps: PropsType, newProps: PropsType): void {
-  //   this.componentDidUpdate(oldProps, newProps);
-  // }
-
-  // public componentDidUpdate(oldProps: PropsType, newProps: PropsType): void {
-  //   console.log('oldProps', oldProps, 'newProps', newProps);
-  //   if (oldProps !== newProps) {
-  //     this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
-  //   }
-  // }
-
   private _componentDidUpdate(oldProps: PropsType, newProps: PropsType): void {
     const response = this.componentDidUpdate(oldProps, newProps);
     if (!response) {
       return;
     }
-    this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
+
     this._render();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   componentDidUpdate(oldProps: PropsType, newProps: PropsType) {
+    console.log('o', oldProps, 'n', newProps);
+    this.componentDidUpdate;
     if (!isEqual(oldProps, newProps)) return true;
-
-    return false;
   }
 
   // componentDidUpdate(newProps, oldProps) {
@@ -184,26 +175,14 @@ export default abstract class Block<
   //   }
   // }
 
-  // _componentDidUpdate() {
-  //   const response = this.componentDidUpdate();
-  //   if (!response) {
-  //     return;
-  //   }
-  //   this._render();
-  // }
-
-  // componentDidUpdate() {
-  //   return true;
-  // }
-
   public setProps = (nextProps: Node) => {
-    //console.log('nextProps: ', nextProps);
+    console.log('nextProps: ', nextProps, 'this.props', this.props);
     if (!nextProps) {
       return;
     }
 
     Object.assign(this.props, nextProps);
-    //this.eventBus().emit(Block.EVENTS.FLOW_CDU);
+    this.eventBus().emit(Block.EVENTS.FLOW_CDU);
   };
 
   compile(template: string, props: PropsType): DocumentFragment {
@@ -289,22 +268,6 @@ export default abstract class Block<
     });
   }
 
-  public show(): void {
-    const content = this.getContent();
-    if (content) content.style.display = 'block';
-    // if (content) {
-    //   document.getElementById('app')!.appendChild(content);
-    // }
-  }
-
-  public hide(): void {
-    const content = this.getContent();
-    if (content) content.style.display = 'none';
-    // if (content) {
-    //   content.remove();
-    // }
-  }
-
   private _makePropsProxy(props: Props) {
     const self = this;
     const proxyProps = new Proxy(props, {
@@ -335,5 +298,19 @@ export default abstract class Block<
     });
 
     return proxyProps;
+  }
+
+  public show(): void {
+    const content = this.getContent();
+    if (content) {
+      document.getElementById('app')!.appendChild(content);
+    }
+  }
+
+  public hide(): void {
+    const content = this.getContent();
+    if (content) {
+      content.remove();
+    }
   }
 }

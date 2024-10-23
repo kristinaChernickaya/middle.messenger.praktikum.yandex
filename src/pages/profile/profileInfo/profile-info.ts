@@ -1,39 +1,42 @@
-import { authController } from '../../../controllers';
+import { isEqual } from '../../../utils';
 import * as Component from '../../../components';
 import * as Service from '../../../services';
 import { TProps } from '../../../types';
 import template from '../template.hbs?raw';
-import { isEqual } from '../../../utils';
+import { store } from '../../../store';
+import { UserController } from '../../../controllers';
 
 export default class ProfileInfo extends Service.Block {
   constructor(props?: TProps) {
-    // authController.getUserData();
     const linksProps = [
       {
         link: new Component.Link({
           text: 'Изменить данные',
-          href: '/',
           events: {
-            click: () => {},
+            click: () => {
+              Service.router.go('/settings/edit');
+            },
           },
         }),
       },
       {
         link: new Component.Link({
           text: 'Изменить пароль',
-          href: '/',
           events: {
-            click: () => {},
+            click: () => {
+              Service.router.go('/settings/edit-password');
+            },
           },
         }),
       },
       {
         link: new Component.Link({
           text: 'Выйти',
-          href: '/',
           className: 'text-red-color',
           events: {
-            click: () => {},
+            click: () => {
+              Service.router.go('/settings/edit');
+            },
           },
         }),
       },
@@ -64,7 +67,9 @@ export default class ProfileInfo extends Service.Block {
     const backButton = new Component.Button({
       className: 'arrowLeft',
       events: {
-        click: () => {},
+        click: () => {
+          Service.router.go('/messenger');
+        },
       },
     });
 
@@ -78,22 +83,15 @@ export default class ProfileInfo extends Service.Block {
     });
   }
 
-  // componentDidUpdate(oldProps, newProps) {
-  //   console.log(this.props);
-  //   if (!isEqual(oldProps.user, newProps.user)) {
-  //     this.setProps({
-  //       userName: 'Alex',
-  //       user: {
-  //         first_name: 'John',
-  //         second_name: 'Doe',
-  //         display_name: 'My display name',
-  //       },
-  //     });
-  //   }
+  // componentDidUpdate(newProps, oldProps) {
+  //   console.log('componentDidUpdate');
+  // if (!isEqual(newProps.user, oldProps.user)) {
+  //   console.log('n', newProps, 'o', oldProps);
+  //   this.setProps({ user: 'sdfsdf' });
+  // }
   // }
 
   override render() {
-    // console.log(this.props);
-    return this.compile(template, { ...this.props });
+    return this.compile(template, {});
   }
 }

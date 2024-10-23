@@ -85,7 +85,7 @@ export default class ProfileEditPassword extends Service.Block {
       className: 'arrowLeft',
       events: {
         click: () => {
-          console.log('back event');
+          Service.router.go('/settings');
         },
       },
     });

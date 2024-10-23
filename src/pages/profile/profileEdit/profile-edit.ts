@@ -1,8 +1,10 @@
 import * as Component from '../../../components';
 import * as Service from '../../../services';
-import { TProps } from '../../../types';
+import { TProps, UserType } from '../../../types';
 import template from '../template.hbs?raw';
 import { getDataForm } from '../../../utils';
+import { userController } from '../../../controllers';
+import { store } from '../../../store';
 
 export default class ProfileEdit extends Service.Block {
   constructor(props?: TProps) {
@@ -11,7 +13,7 @@ export default class ProfileEdit extends Service.Block {
         label: 'Почта',
         input: new Component.Input({
           type: 'text',
-          placeholderText: props.user.email,
+          value: props.user.email,
           name: 'email',
           className: 'text-profile-block_input',
           attr: {
@@ -29,7 +31,7 @@ export default class ProfileEdit extends Service.Block {
         label: 'Логин',
         input: new Component.Input({
           type: 'text',
-          placeholderText: props.user.login,
+          value: props.user.login,
           name: 'login',
           className: 'text-profile-block_input',
           attr: {
@@ -49,7 +51,8 @@ export default class ProfileEdit extends Service.Block {
         label: 'Имя',
         input: new Component.Input({
           type: 'text',
-          placeholderText: props.user.first_name,
+          //placeholderText: props.user.first_name,
+          value: props.user.first_name,
           name: 'first_name',
           className: 'text-profile-block_input',
           attr: {
@@ -67,7 +70,7 @@ export default class ProfileEdit extends Service.Block {
         label: 'Фамилия',
         input: new Component.Input({
           type: 'text',
-          placeholderText: props.user.second_name,
+          value: props.user.second_name,
           name: 'second_name',
           className: 'text-profile-block_input',
           attr: {
@@ -85,7 +88,7 @@ export default class ProfileEdit extends Service.Block {
         label: 'Имя в чате',
         input: new Component.Input({
           type: 'text',
-          placeholderText: props.user.display_name,
+          value: props.user.display_name,
           name: 'display_name',
           className: 'text-profile-block_input',
         }),
@@ -94,7 +97,7 @@ export default class ProfileEdit extends Service.Block {
         label: 'Телефон',
         input: new Component.Input({
           type: 'text',
-          placeholderText: props.user.phone,
+          value: props.user.phone,
           name: 'phone',
           className: 'text-profile-block_input',
           attr: {
@@ -127,7 +130,10 @@ export default class ProfileEdit extends Service.Block {
     const backButton = new Component.Button({
       className: 'arrowLeft',
       events: {
-        click: () => {},
+        click: () => {
+          this.componentDidUpdate(props, store.getState());
+          Service.router.go('/settings');
+        },
       },
     });
 
@@ -136,14 +142,17 @@ export default class ProfileEdit extends Service.Block {
       buttonSubmit,
       events: {
         submit: (event: Event) => {
+          event.preventDefault();
           Service.validateForm(event);
           if (Service.validateForm(event)) {
-            getDataForm(event);
+            const data = getDataForm(event);
+            userController.updateUserProfile(data as UserType);
+            //this.componentDidUpdate(props, store.getState());
           }
         },
       },
     });
-
+    console.log(props);
     super({
       ...props,
       topContainer: avatar,
@@ -154,6 +163,7 @@ export default class ProfileEdit extends Service.Block {
   }
 
   override render() {
-    return this.compile(template, { ...this.props });
+    console.log(this.props);
+    return this.compile(template, {});
   }
 }

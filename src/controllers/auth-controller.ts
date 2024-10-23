@@ -22,6 +22,7 @@ export class AuthController {
         store.setState('user', JSON.parse(data));
       })
       .catch((error) => {
+        //console.log(error);
         // store.setState('errorMessage', JSON.parse(error.response).reason);
       });
   }
@@ -53,10 +54,6 @@ export class AuthController {
       .catch((error) => {
         store.setState('errorMessage', JSON.parse(error.response).reason);
       });
-  }
-
-  getStore() {
-    //return store.getState();
   }
 }
 

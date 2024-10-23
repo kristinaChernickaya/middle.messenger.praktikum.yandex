@@ -81,12 +81,13 @@ export type InputType = AttrEventsType & {
   text?: string;
   type: string;
   name: string;
+  value?: string;
   className?: string;
   placeholderText?: string;
 };
 
 export type LinkType = AttrEventsType & {
-  href: string;
+  // href: string;
   className?: string;
   text?: string;
 };

@@ -1,3 +1,4 @@
+import { UserType } from '../types';
 import * as Service from '../services';
 
 const chatAPIInstance = new Service.HttpClient('https://ya-praktikum.tech/api/v2/auth');
@@ -11,17 +12,21 @@ export class AuthAPI extends Service.BaseAPI {
       },
     });
   }
-  loginAPI(data) {
-    return chatAPIInstance.post('/signin', {
-      isCredentials: true,
-      headers: {
-        'content-type': 'application/json',
-      },
-      data: JSON.stringify(data),
-    });
+  loginAPI(data: UserType) {
+    return chatAPIInstance
+      .post('/signin', {
+        isCredentials: true,
+        headers: {
+          'content-type': 'application/json',
+        },
+        data: JSON.stringify(data),
+      })
+      .then(() => {
+        Service.router.go('/messenger');
+      });
   }
 
-  signUpAPI(data) {
+  signUpAPI(data: UserType) {
     return chatAPIInstance.post('/signup', {
       isCredentials: true,
       headers: {
@@ -31,5 +36,5 @@ export class AuthAPI extends Service.BaseAPI {
     });
   }
 }
-const authAPI = new AuthAPI();
-export default authAPI;
+
+export const authAPI = new AuthAPI();

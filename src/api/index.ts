@@ -1,1 +1,2 @@
-export { default as authAPI, AuthAPI } from './auth-api';
+export { authAPI, AuthAPI } from './auth-api';
+export { userAPI, UserAPI } from './user-api';
