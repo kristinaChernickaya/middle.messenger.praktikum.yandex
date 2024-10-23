@@ -90,7 +90,6 @@ export default class Login extends Service.Block {
   }
 
   override render() {
-    // console.log('auth props: ', this.props);
     return this.compile(template, { ...this.props });
   }
 }

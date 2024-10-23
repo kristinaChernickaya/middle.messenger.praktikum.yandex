@@ -15,18 +15,29 @@ export class AuthController {
       });
   }
 
+  public getUserData() {
+    return authAPI
+      .getUserAPI()
+      .then((data) => {
+        store.setState('user', JSON.parse(data));
+      })
+      .catch((error) => {
+        // store.setState('errorMessage', JSON.parse(error.response).reason);
+      });
+  }
+
   login(dataForm: UserType) {
     return authAPI
       .loginAPI(dataForm)
       .then(() =>
         authAPI.getUserAPI().then((data) => {
           store.setState('user', JSON.parse(data));
-          router.go('/messenger');
+          //router.go('/messenger');
         }),
       )
       .catch((error) => {
-        store.setState('errorMessage', JSON.parse(error.response).reason);
-        router.go('/');
+        // store.setState('errorMessage', JSON.parse(error.response).reason);
+        //router.go('/');
       });
   }
 
@@ -40,7 +51,6 @@ export class AuthController {
         }),
       )
       .catch((error) => {
-        console.log(JSON.parse(error.response).reason);
         store.setState('errorMessage', JSON.parse(error.response).reason);
       });
   }

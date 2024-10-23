@@ -2,6 +2,8 @@ import EventBus from './eventBus';
 import Handlebars from 'handlebars';
 import { v4 as makeUUID } from 'uuid';
 import { EventType, ObjectType } from '../types';
+import { isEqual } from '../utils';
+import { store } from '../store';
 
 export type PropsType = {
   events?: EventType;
@@ -41,7 +43,6 @@ export default abstract class Block<
     const { children, props, lists } = this._getChildrenAndList(propsAndChildren!);
     this.children = children;
     this.lists = lists;
-
     const eventBus = new EventBus();
 
     this.id = makeUUID();
@@ -85,13 +86,13 @@ export default abstract class Block<
   }
 
   public _init() {
+    this.init();
+    // console.log('init block');
     this._createResources();
     this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
   }
 
-  init(): void | null {
-    return null;
-  }
+  init(): void | null {}
 
   private _createResources() {
     this._element = this._createDocumentElement('div');
@@ -142,15 +143,47 @@ export default abstract class Block<
     });
   }
 
+  // private _componentDidUpdate(oldProps: PropsType, newProps: PropsType): void {
+  //   this.componentDidUpdate(oldProps, newProps);
+  // }
+
+  // public componentDidUpdate(oldProps: PropsType, newProps: PropsType): void {
+  //   console.log('oldProps', oldProps, 'newProps', newProps);
+  //   if (oldProps !== newProps) {
+  //     this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
+  //   }
+  // }
+
   private _componentDidUpdate(oldProps: PropsType, newProps: PropsType): void {
-    this.componentDidUpdate(oldProps, newProps);
+    const response = this.componentDidUpdate(oldProps, newProps);
+    if (!response) {
+      return;
+    }
+    this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
+    this._render();
   }
 
-  public componentDidUpdate(oldProps: PropsType, newProps: PropsType): void {
-    if (oldProps !== newProps) {
-      this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
-    }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  componentDidUpdate(oldProps: PropsType, newProps: PropsType) {
+    if (!isEqual(oldProps, newProps)) return true;
+
+    return false;
   }
+
+  // componentDidUpdate(newProps, oldProps) {
+  //   console.log('ffffffffffffff', newProps, oldProps);
+  //   if (!isEqual(newProps.user, oldProps.user)) {
+  //     this.setProps({
+  //       middleContainer: newProps.user((field) => {
+  //         return new Component.TextProfile({
+  //           label: 'field.label',
+  //           text: props?.user[field.text],
+  //         });
+  //       }),
+  //     });
+  //   }
+  // }
+
   // _componentDidUpdate() {
   //   const response = this.componentDidUpdate();
   //   if (!response) {
@@ -164,13 +197,13 @@ export default abstract class Block<
   // }
 
   public setProps = (nextProps: Node) => {
+    //console.log('nextProps: ', nextProps);
     if (!nextProps) {
       return;
     }
 
     Object.assign(this.props, nextProps);
-    console.log('this.props: ', this.props, 'nextProps (новый state):', nextProps);
-    this.eventBus().emit(Block.EVENTS.FLOW_CDU);
+    //this.eventBus().emit(Block.EVENTS.FLOW_CDU);
   };
 
   compile(template: string, props: PropsType): DocumentFragment {
@@ -258,16 +291,18 @@ export default abstract class Block<
 
   public show(): void {
     const content = this.getContent();
-    if (content) {
-      document.getElementById('app')!.appendChild(content);
-    }
+    if (content) content.style.display = 'block';
+    // if (content) {
+    //   document.getElementById('app')!.appendChild(content);
+    // }
   }
 
   public hide(): void {
     const content = this.getContent();
-    if (content) {
-      content.remove();
-    }
+    if (content) content.style.display = 'none';
+    // if (content) {
+    //   content.remove();
+    // }
   }
 
   private _makePropsProxy(props: Props) {
@@ -286,6 +321,7 @@ export default abstract class Block<
         // if (prop.startsWith('_') || !value) {
         //   throw new Error('Нет прав');
         // }
+
         const oldProps = { ...target };
         target[prop] = value;
         self.eventBus().emit(Block.EVENTS.FLOW_CDU, oldProps, target);

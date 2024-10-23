@@ -10,7 +10,14 @@ export class Store extends EventBus<any> {
   private state: StoreType = {
     errorMessage: '',
     user: {
-      data: {},
+      id: null,
+      first_name: 'ss',
+      second_name: '',
+      display_name: null,
+      login: '',
+      avatar: null,
+      email: '',
+      phone: '',
     },
   };
 
@@ -21,7 +28,6 @@ export class Store extends EventBus<any> {
   public setState(path: string, value: unknown) {
     set(this.state, path, value);
     this.emit(StoreEvents.Updated, this.getState());
-    console.log(this.state);
   }
 }
 
