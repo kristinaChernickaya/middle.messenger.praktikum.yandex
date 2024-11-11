@@ -7,10 +7,17 @@ window.addEventListener('DOMContentLoaded', async () => {
   let isAuth = await authController.getUserAuth().then((isResponse) => isResponse);
   await authController.getUserData();
 
+  // function mapUserToProps(state) {
+  //   return {
+  //     user: state.user,
+  //   };
+  // }
+
   function mapUserToProps(state) {
-    return {
-      user: state.user,
-    };
+    let { ...tmpUser } = state.user;
+
+    console.log('tmp', state);
+    return { user: tmpUser };
   }
 
   router
@@ -24,25 +31,25 @@ window.addEventListener('DOMContentLoaded', async () => {
 
   let pathWindow = window.location.pathname;
 
-  if (isAuth) {
-    if (pathWindow === '/' || pathWindow === '/sign-up') {
-      router.go(routes.settings);
-    }
-  }
-  if (!isAuth) {
-    if (
-      pathWindow === '/messenger' ||
-      pathWindow === '/settings' ||
-      pathWindow === '/settings/edit' ||
-      pathWindow === '/settings/edit-password'
-    ) {
-      router.go(routes.login);
-    }
-  }
+  // if (isAuth) {
+  //   if (pathWindow === '/' || pathWindow === '/sign-up') {
+  //     router.go(routes.settings);
+  //   }
+  // }
+  // if (!isAuth) {
+  //   if (
+  //     pathWindow === '/messenger' ||
+  //     pathWindow === '/settings' ||
+  //     pathWindow === '/settings/edit' ||
+  //     pathWindow === '/settings/edit-password'
+  //   ) {
+  //     router.go(routes.login);
+  //   }
+  // }
 
-  if (!Object.values(routes).includes(pathWindow)) {
-    router.go(routes.notFoundPage);
-  }
+  // if (!Object.values(routes).includes(pathWindow)) {
+  //   router.go(routes.notFoundPage);
+  // }
 
   router.start();
 });

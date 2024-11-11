@@ -83,15 +83,12 @@ export default class ProfileInfo extends Service.Block {
     });
   }
 
-  // componentDidUpdate(newProps, oldProps) {
-  //   console.log('componentDidUpdate');
-  // if (!isEqual(newProps.user, oldProps.user)) {
-  //   console.log('n', newProps, 'o', oldProps);
-  //   this.setProps({ user: 'sdfsdf' });
-  // }
-  // }
-
+  componentDidUpdate(oldProps: PropsType, newProps: PropsType) {
+    console.log('o', oldProps, 'n', newProps);
+    return !isEqual(oldProps, newProps);
+  }
   override render() {
+    console.log(this.props);
     return this.compile(template, {});
   }
 }

@@ -147,18 +147,18 @@ export default abstract class Block<
 
   private _componentDidUpdate(oldProps: PropsType, newProps: PropsType): void {
     const response = this.componentDidUpdate(oldProps, newProps);
+    console.log('response', response);
     if (!response) {
       return;
     }
 
-    this._render();
+    // this._render();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   componentDidUpdate(oldProps: PropsType, newProps: PropsType) {
     console.log('o', oldProps, 'n', newProps);
-    this.componentDidUpdate;
-    if (!isEqual(oldProps, newProps)) return true;
+    return !isEqual(oldProps, newProps);
   }
 
   // componentDidUpdate(newProps, oldProps) {

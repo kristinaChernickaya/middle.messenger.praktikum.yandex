@@ -33,12 +33,12 @@ export class AuthController {
       .then(() =>
         authAPI.getUserAPI().then((data) => {
           store.setState('user', JSON.parse(data));
-          //router.go('/messenger');
+          router.go('/messenger');
         }),
       )
       .catch((error) => {
-        // store.setState('errorMessage', JSON.parse(error.response).reason);
-        //router.go('/');
+        store.setState('errorMessage', JSON.parse(error.response).reason);
+        router.go('/');
       });
   }
 
@@ -48,10 +48,12 @@ export class AuthController {
       .then(() =>
         authAPI.getUserAPI().then((data) => {
           store.setState('user', JSON.parse(data));
-          router.go('/messenger');
+          console.log('data');
+          router.go('/');
         }),
       )
       .catch((error) => {
+        console.log('bad', error);
         store.setState('errorMessage', JSON.parse(error.response).reason);
       });
   }

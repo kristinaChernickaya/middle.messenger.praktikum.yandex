@@ -13,17 +13,13 @@ export class AuthAPI extends Service.BaseAPI {
     });
   }
   loginAPI(data: UserType) {
-    return chatAPIInstance
-      .post('/signin', {
-        isCredentials: true,
-        headers: {
-          'content-type': 'application/json',
-        },
-        data: JSON.stringify(data),
-      })
-      .then(() => {
-        Service.router.go('/messenger');
-      });
+    return chatAPIInstance.post('/signin', {
+      isCredentials: true,
+      headers: {
+        'content-type': 'application/json',
+      },
+      data: JSON.stringify(data),
+    });
   }
 
   signUpAPI(data: UserType) {

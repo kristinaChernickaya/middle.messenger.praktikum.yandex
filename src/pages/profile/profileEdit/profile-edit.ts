@@ -131,7 +131,6 @@ export default class ProfileEdit extends Service.Block {
       className: 'arrowLeft',
       events: {
         click: () => {
-          this.componentDidUpdate(props, store.getState());
           Service.router.go('/settings');
         },
       },
@@ -146,6 +145,7 @@ export default class ProfileEdit extends Service.Block {
           Service.validateForm(event);
           if (Service.validateForm(event)) {
             const data = getDataForm(event);
+            console.log('subm', data);
             userController.updateUserProfile(data as UserType);
             //this.componentDidUpdate(props, store.getState());
           }
