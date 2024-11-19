@@ -75,6 +75,7 @@ export default class ProfileInfo extends Service.Block {
 
     super({
       topContainer: [avatar, title],
+
       middleContainer: userInfo,
       bottomContainer: links,
       leftSideBar: backButton,
